@@ -1,0 +1,5 @@
+#Session,ID,Occassion,Detector,Sex
+Mid_Nass_Valley_1997,MNV_1,1,796993_1237734_BS,NA
+Mid_Nass_Valley_1997,MNV_17,1,796993_1237734_BS,NA
+Mid_Nass_Valley_1997,MNV_2,2,836405_1178798_BS,F
+Mid_Nass_Valley_1997,MNV_29,1,796993_1237734_BS,NA

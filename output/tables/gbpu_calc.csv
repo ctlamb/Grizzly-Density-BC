@@ -1,0 +1,57 @@
+Name,Status,Density,Abundance,Hunterrate,Nonhunterrate
+Alta,Viable,12.3 (10.4-14.7),165 (139-196),1.6,0.2
+Babine,Viable,14.2 (12.1-16.9),203 (172-240),2.4,0.8
+Blackwater-West Chilcotin,Threatened,11.8 (9.6-14.4),238 (195-291),0.1,0.5
+Bulkley-Lakes,Viable,12.3 (10.3-14.8),294 (245-353),2.4,1.1
+Cassiar,Viable,34.6 (29.2-41),1277 (1079-1514),0.8,0.1
+Central Monashee,Viable,13.7 (11.9-15.7),87 (76-100),1.7,0.8
+Central Rockies,Viable,35.9 (31.7-40.7),240 (212-273),2,0.1
+Central Selkirk,Viable,19.2 (16.7-22.1),109 (95-125),3.7,1.4
+Central-South Purcells,Viable,21.2 (18.4-24.5),244 (212-282),1.8,1.1
+Columbia-Shuswap,Viable,17.4 (15.2-20.1),197 (171-227),2.3,0.4
+Cranberry,Viable,10.8 (8.7-13.4),126 (102-157),3.6,1.7
+Edziza-Lower Stikine,Viable,39.4 (33.5-46.4),620 (527-730),0.7,0.1
+Finlay-Ospika,Viable,35.4 (30.8-40.7),1088 (946-1251),1.5,0
+Flathead,Viable,21.6 (18.6-25),75 (65-87),5.2,1.5
+Francois,Viable,10.9 (9.2-12.9),95 (81-113),0.3,0.1
+Garibaldi-Pitt,Threatened,7.7 (6.2-9.7),9 (7-11),0,0
+Hart,Viable,20.4 (17.5-23.7),403 (347-469),2.2,0.4
+Hyland,Viable,25.2 (21-30.2),441 (368-530),1.2,0.1
+Kettle-Granby,Threatened,12.7 (11-14.8),84 (73-98),0,0.7
+Khutzeymateen,Viable,9 (7-11.6),74 (57-96),0.9,0.4
+Kingcome-Wakeman,Viable,13.9 (11.1-17.4),84 (68-105),2.4,0.1
+Kitlope-Fiordland,Viable,14.3 (11.5-17.9),158 (127-198),0.5,0
+Klinaklini-Homathko,Viable,20.1 (16.4-24.7),256 (209-314),0.2,0.2
+Knight-Bute,Viable,15.1 (12.1-18.7),99 (80-124),3.4,0
+Kwatna-Owikeno,Viable,13 (10.4-16.3),148 (118-186),1.7,0.5
+Moberly,Viable,22.2 (19.2-25.7),173 (149-200),1.4,0.3
+Muskwa,Viable,36.9 (31.6-43.1),1326 (1137-1549),1.3,0.1
+Nation,Viable,10 (8.5-11.9),186 (157-220),1.6,0.5
+North Cascades,Threatened,10.3 (8.6-12.2),60 (50-71),0,0
+North Coast,Viable,7.7 (5.8-10.2),55 (41-73),4.9,1.1
+North Purcells,Viable,36.3 (32.2-40.8),201 (179-227),3.5,0.1
+North Selkirk,Viable,33.4 (29.7-37.6),203 (181-229),3,0
+Nulki,Viable,6.7 (5.4-8.5),48 (39-61),0.2,4.4
+Omineca,Viable,20 (17.4-23.1),600 (522-690),1.6,0
+Parsnip,Viable,25.5 (22-29.6),279 (241-323),3.2,0.2
+Quesnel Lake North,Viable,18.3 (16-21),138 (120-158),3.6,0.1
+Robson,Viable,22.7 (19.9-25.8),441 (387-503),2.8,0.2
+Rockies Park Ranges,Viable,22.4 (19.4-26),132 (114-153),2.5,0.8
+Rocky,Viable,26.8 (22.7-31.6),1027 (871-1213),1.1,0.5
+South Chilcotin Ranges,Threatened,16.4 (13.8-19.5),262 (221-312),0.1,0.3
+South Rockies,Viable,20.7 (17.7-24.3),174 (148-204),3.9,3.3
+South Selkirk,Threatened,10.5 (8.7-12.9),42 (35-52),0,1.9
+Spatsizi,Viable,46.7 (40.4-54),1009 (873-1167),1,0.1
+Spillamacheen,Viable,23.5 (20.5-26.9),94 (82-108),2.8,0.4
+Squamish-Lillooet,Threatened,18.4 (15.4-22),90 (75-107),0,0
+Stein-Nahatlatch,Threatened,9.6 (7.8-11.7),53 (43-65),0.2,0.4
+Stewart,Viable,27.6 (22.7-33.5),292 (241-355),1.7,0.4
+Taiga,Viable,19.5 (16.5-22.9),973 (827-1146),0,0
+Taku,Viable,26.8 (22-32.7),772 (634-943),1.3,0.1
+Tatshenshini,Viable,52.8 (44.3-62.9),800 (672-955),0.8,0
+Toba-Bute,Viable,20.4 (17-24.5),149 (124-179),0,0.1
+Tweedsmuir,Viable,20.9 (17.7-24.7),396 (335-468),0.8,0.8
+Upper Skeena-Nass,Viable,34.5 (29.7-40.1),587 (506-681),1.5,0.1
+Valhalla,Viable,15.2 (13.1-17.7),52 (45-61),1.2,0.6
+Wells Gray,Viable,20 (17.2-23.2),200 (173-233),1.1,0.1
+Yahk,Threatened,11.9 (9-15.7),31 (24-42),0,2.3

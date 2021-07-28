@@ -1,0 +1,4 @@
+#Session,ID,Occassion,Detector,Sex
+Stein_Nahat_2015,SN_F60,4,1284724_619460_HT,F
+Stein_Nahat_2015,SN_F60,5,1281622_617260_HT,F
+Stein_Nahat_2015,SN_M107,2,1265868_594058_HT,M
