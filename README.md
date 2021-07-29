@@ -30,6 +30,7 @@ library(rworldmap)
 library(maps)
 library(ggsflabel)
 library(oSCR)
+library(knitr)
 library(tidyverse)
 
 
@@ -195,12 +196,8 @@ inset <- ggplot() +
         plot.background = element_rect(fill = "transparent",colour = NA))+
   xlim(-1E6,5.3E6)+
   ylim(-2E6,4.5E6)
-inset 
-```
 
-![](README_files/figure-gfm/map%20data-1.png)<!-- -->
 
-``` r
 map <- ggRGB(a, r=1, g=2, b=3)+
   theme_bw()+
   geom_sf(data=range,alpha=0.1, inherit.aes = FALSE)+
@@ -282,7 +279,7 @@ ggarrange(map,
           heights=c(2,1))
 ```
 
-![](README_files/figure-gfm/map%20data-2.png)<!-- -->
+![](README_files/figure-gfm/map%20data-1.png)<!-- -->
 
 ``` r
 ggsave(here::here("output", "plots", "map_paper.png"), height=8, width=8, unit="in")
@@ -466,13 +463,10 @@ ms.ssDF <- ms.clipmask(ssDF=ms.ssDF,
 
 saveRDS(ms.ssDF, here::here("Data_Prep", "Spatial_Layers_ProvSECR","clean","state_space.rds"))
 
-ggplot(data=ms.ssDF[[31]],aes(x=X,y=Y,fill=Tr))+geom_raster()+
-  scale_fill_gradientn(colors=rev(viridis_pal()(20)))+theme_minimal()
-```
+# ggplot(data=ms.ssDF[[31]],aes(x=X,y=Y,fill=Tr))+geom_raster()+
+#   scale_fill_gradientn(colors=rev(viridis_pal()(20)))+theme_minimal()
 
-![](README_files/figure-gfm/mask-4.png)<!-- -->
 
-``` r
 ###cleanup objects
 rm(df)
 rm(map)
@@ -600,9 +594,11 @@ saveRDS(sess.pool.mod, here::here("output", "mods", "sess.pool.mod.RDS"))
 #load models
 sess.pool.mod <- readRDS(here::here("output", "mods", "sess.pool.mod.RDS"))
 
+
+
 ###predict results
 #make a dataframe of values predictions
-pred.df <- data.frame(session=filelist%>%str_split("/", simplify = TRUE)%>%as_tibble%>%pull(V10)%>%str_sub(1,-5),
+pred.df <- data.frame(session=filelist%>%str_split("/", simplify = TRUE)%>%as_tibble%>%pull(V16)%>%str_sub(1,-5),
                         pool = as.character(d.pool),
                         d.pool = as.character(d.pool),
                       sex=factor(1,levels=c(0,1)),
@@ -682,14 +678,19 @@ lm(sig~estimate, d)%>%summary()
     ## lm(formula = sig ~ estimate, data = d)
     ## 
     ## Residuals:
-    ## ALL 1 residuals are 0: no residual degrees of freedom!
+    ##     Min      1Q  Median      3Q     Max 
+    ## -5212.3 -1065.2   221.4  1140.6  4142.8 
     ## 
-    ## Coefficients: (1 not defined because of singularities)
-    ##             Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)     9357         NA      NA       NA
-    ## estimate          NA         NA      NA       NA
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept) 11632.51     937.03  12.414 3.46e-12 ***
+    ## estimate     -140.77      42.47  -3.315   0.0028 ** 
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: NaN on 0 degrees of freedom
+    ## Residual standard error: 2019 on 25 degrees of freedom
+    ## Multiple R-squared:  0.3053, Adjusted R-squared:  0.2775 
+    ## F-statistic: 10.99 on 1 and 25 DF,  p-value: 0.002802
 
 ``` r
 lm(p0~estimate, d)%>%summary()
@@ -700,14 +701,19 @@ lm(p0~estimate, d)%>%summary()
     ## lm(formula = p0 ~ estimate, data = d)
     ## 
     ## Residuals:
-    ## ALL 1 residuals are 0: no residual degrees of freedom!
+    ##       Min        1Q    Median        3Q       Max 
+    ## -0.060470 -0.018304 -0.002018  0.012462  0.069642 
     ## 
-    ## Coefficients: (1 not defined because of singularities)
-    ##             Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)  0.05723         NA      NA       NA
-    ## estimate          NA         NA      NA       NA
+    ## Coefficients:
+    ##              Estimate Std. Error t value Pr(>|t|)   
+    ## (Intercept) 0.0445593  0.0145141    3.07   0.0051 **
+    ## estimate    0.0008550  0.0006578    1.30   0.2055   
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: NaN on 0 degrees of freedom
+    ## Residual standard error: 0.03128 on 25 degrees of freedom
+    ## Multiple R-squared:  0.0633, Adjusted R-squared:  0.02583 
+    ## F-statistic: 1.689 on 1 and 25 DF,  p-value: 0.2055
 
 ``` r
 lm(sig~p0, d)%>%summary()
@@ -718,14 +724,19 @@ lm(sig~p0, d)%>%summary()
     ## lm(formula = sig ~ p0, data = d)
     ## 
     ## Residuals:
-    ## ALL 1 residuals are 0: no residual degrees of freedom!
+    ##     Min      1Q  Median      3Q     Max 
+    ## -4486.2 -1558.7   211.7  1509.3  5166.1 
     ## 
-    ## Coefficients: (1 not defined because of singularities)
-    ##             Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)     9357         NA      NA       NA
-    ## p0                NA         NA      NA       NA
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)  10876.3      926.8  11.735 1.16e-11 ***
+    ## p0          -33536.1    13409.4  -2.501   0.0193 *  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: NaN on 0 degrees of freedom
+    ## Residual standard error: 2167 on 25 degrees of freedom
+    ## Multiple R-squared:  0.2001, Adjusted R-squared:  0.1681 
+    ## F-statistic: 6.255 on 1 and 25 DF,  p-value: 0.0193
 
 ## TEST DETECTION
 
@@ -784,9 +795,26 @@ saveRDS(mods.det.out, here::here("output", "mods", "det.mods.RDS"))
 ``` r
 mods.det.out <- readRDS(here::here("output", "mods", "det.mods.RDS"))
 
+##fit
+(fitList.oSCR(mods.det.out)%>%
+  modSel.oSCR())$aic.tab%>%
+  as_tibble()%>%
+  kable()
+```
+
+| model |     logL |  K |      AIC |      dAIC | weight | CumWt |
+| :---- | -------: | -: | -------: | --------: | -----: | ----: |
+| 6     | 13296.12 | 55 | 26702.25 |    0.0000 |      1 |     1 |
+| 5     | 13442.74 | 54 | 26993.48 |  291.2347 |      0 |     1 |
+| 3     | 13480.70 | 33 | 27027.41 |  325.1614 |      0 |     1 |
+| 4     | 13634.68 | 52 | 27373.37 |  671.1184 |      0 |     1 |
+| 2     | 13694.36 | 32 | 27452.73 |  750.4786 |      0 |     1 |
+| 1     | 13898.02 | 30 | 27856.03 | 1153.7856 |      0 |     1 |
+
+``` r
 ###predict results
 #make a dataframe of values predictions
-pred.df <- data.frame(session=filelist%>%str_split("/", simplify = TRUE)%>%as_tibble%>%pull(V10)%>%str_sub(1,-5),
+pred.df <- data.frame(session=filelist%>%str_split("/", simplify = TRUE)%>%as_tibble%>%pull(V16)%>%str_sub(1,-5),
                         pool = as.character(d.pool),
                         d.pool = as.character(d.pool),
                         ph.pool = as.character(ph.pool),
@@ -867,14 +895,19 @@ lm(sig~estimate, d2%>%ungroup%>%distinct(sig,.keep_all = TRUE))%>%summary()
     ##     .keep_all = TRUE))
     ## 
     ## Residuals:
-    ## ALL 1 residuals are 0: no residual degrees of freedom!
+    ##     Min      1Q  Median      3Q     Max 
+    ## -4286.7  -709.1   754.5   916.1  2599.7 
     ## 
-    ## Coefficients: (1 not defined because of singularities)
-    ##             Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)     9323         NA      NA       NA
-    ## estimate          NA         NA      NA       NA
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept) 10570.88    1327.65   7.962 1.23e-05 ***
+    ## estimate      -95.80      58.99  -1.624    0.135    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: NaN on 0 degrees of freedom
+    ## Residual standard error: 1961 on 10 degrees of freedom
+    ## Multiple R-squared:  0.2087, Adjusted R-squared:  0.1296 
+    ## F-statistic: 2.638 on 1 and 10 DF,  p-value: 0.1354
 
 ``` r
 lm(p0~estimate, d2%>%ungroup%>%distinct(sig,.keep_all = TRUE))%>%summary()
@@ -886,14 +919,19 @@ lm(p0~estimate, d2%>%ungroup%>%distinct(sig,.keep_all = TRUE))%>%summary()
     ##     .keep_all = TRUE))
     ## 
     ## Residuals:
-    ## ALL 1 residuals are 0: no residual degrees of freedom!
+    ##       Min        1Q    Median        3Q       Max 
+    ## -0.037755 -0.016932 -0.001588  0.007832  0.062203 
     ## 
-    ## Coefficients: (1 not defined because of singularities)
-    ##             Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)   0.0576         NA      NA       NA
-    ## estimate          NA         NA      NA       NA
+    ## Coefficients:
+    ##              Estimate Std. Error t value Pr(>|t|)  
+    ## (Intercept) 0.0541010  0.0207875   2.603   0.0264 *
+    ## estimate    0.0005953  0.0009236   0.645   0.5337  
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: NaN on 0 degrees of freedom
+    ## Residual standard error: 0.0307 on 10 degrees of freedom
+    ## Multiple R-squared:  0.03989,    Adjusted R-squared:  -0.05612 
+    ## F-statistic: 0.4155 on 1 and 10 DF,  p-value: 0.5337
 
 ``` r
 lm(sig~p0, d2%>%ungroup%>%distinct(sig,.keep_all = TRUE))%>%summary()
@@ -905,14 +943,19 @@ lm(sig~p0, d2%>%ungroup%>%distinct(sig,.keep_all = TRUE))%>%summary()
     ##     .keep_all = TRUE))
     ## 
     ## Residuals:
-    ## ALL 1 residuals are 0: no residual degrees of freedom!
+    ##     Min      1Q  Median      3Q     Max 
+    ## -3640.5 -1094.2   258.9  1547.9  2639.2 
     ## 
-    ## Coefficients: (1 not defined because of singularities)
-    ##             Estimate Std. Error t value Pr(>|t|)
-    ## (Intercept)     9323         NA      NA       NA
-    ## p0                NA         NA      NA       NA
+    ## Coefficients:
+    ##             Estimate Std. Error t value Pr(>|t|)    
+    ## (Intercept)    10557       1460   7.233 2.82e-05 ***
+    ## p0            -29238      20235  -1.445    0.179    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
     ## 
-    ## Residual standard error: NaN on 0 degrees of freedom
+    ## Residual standard error: 2005 on 10 degrees of freedom
+    ## Multiple R-squared:  0.1727, Adjusted R-squared:   0.09 
+    ## F-statistic: 2.088 on 1 and 10 DF,  p-value: 0.1791
 
 ``` r
 d%>%
@@ -1110,7 +1153,8 @@ mods.d.out <- readRDS(here::here("output", "mods", "dens.mods.RDS"))
 ##examine model fits
 (fitList.oSCR(mods.d.out)%>%
   modSel.oSCR())$aic.tab%>%
-  as_tibble()
+  as_tibble()%>%
+  kable()
 ```
 
 ## ASSESS ALTERNATES FOR EACH VARIABLE
@@ -1177,8 +1221,22 @@ mods.d.alt.out <- readRDS(here::here("output", "mods", "dens.mods.alt.RDS"))
 ##examine model fits
 (fitList.oSCR(mods.d.alt.out)%>%
   modSel.oSCR())$aic.tab%>%
-  as_tibble()
+  as_tibble()%>%
+  kable
+```
 
+| model |     logL |  K |      AIC |      dAIC | weight | CumWt |
+| :---- | -------: | -: | -------: | --------: | -----: | ----: |
+| 5     | 13224.11 | 37 | 26522.21 |   0.00000 |      1 |     1 |
+| 2     | 13247.94 | 36 | 26567.88 |  45.66718 |      0 |     1 |
+| 3     | 13249.46 | 36 | 26570.92 |  48.71121 |      0 |     1 |
+| 8     | 13256.12 | 36 | 26584.25 |  62.03185 |      0 |     1 |
+| 1     | 13257.69 | 36 | 26587.38 |  65.16983 |      0 |     1 |
+| 7     | 13262.73 | 36 | 26597.46 |  75.24656 |      0 |     1 |
+| 4     | 13286.08 | 36 | 26644.16 | 121.94699 |      0 |     1 |
+| 6     | 13288.43 | 36 | 26648.85 | 126.64135 |      0 |     1 |
+
+``` r
 ##save top mod
 top.mod.eco <- mods.d.alt.out[[5]]
 ```
@@ -1248,12 +1306,6 @@ plot(dens.rast)
 ```
 
 ![](README_files/figure-gfm/Dens1-1.png)<!-- -->
-
-``` r
-sum(values(dens.rast), na.rm=TRUE)
-```
-
-    ## [1] 19755.52
 
 ``` r
 writeRaster(dens.rast, here::here("output", "surface","density_v1.tif"), overwrite=TRUE)
@@ -1345,12 +1397,7 @@ nhk.big <- killrate(scale=150E3, years=c(1998:2018), sex=c("F", "M"), killcodes=
 kill.stack <- stack(hk.big, nhk.big)
 names(kill.stack) <- c("hk.big", "nhk.big")
 
-plot(kill.stack)
-```
-
-![](README_files/figure-gfm/kill%20rate-1.png)<!-- -->
-
-``` r
+#plot(kill.stack)
 rm(hk.big)
 rm(nhk.big)
 
@@ -1370,12 +1417,10 @@ for(i in 1:length(layers)){
     ## [1] "nhk.big_scale"
 
 ``` r
-plot(kill.stack)
-```
+#plot(kill.stack)
 
-![](README_files/figure-gfm/kill%20rate-2.png)<!-- -->
 
-``` r
+
 ##############################
 #### SAVE STACK
 ##############################
@@ -1438,7 +1483,7 @@ ms.ssDF <- ms.addcovs(ssDF=ms.ssDF,
 
 ``` r
 ms.ssDF[[31]]%>%
-  select(X, Y,paste(c(names(kill.stack)), sep=""))%>%
+  select(X, Y,hk.big, nhk.big)%>%
   gather("vari", "value", -X,-Y)%>%
   ggplot(aes(x=X,y=Y,fill=value))+geom_raster()+
   scale_fill_gradientn(colors=rev(viridis_pal()(20)))+
@@ -1446,7 +1491,7 @@ ms.ssDF[[31]]%>%
   facet_wrap( ~ vari, ncol=4)
 ```
 
-![](README_files/figure-gfm/kill%20rate-3.png)<!-- -->
+![](README_files/figure-gfm/kill%20rate-1.png)<!-- -->
 
 ``` r
 ##Add rasters to STACK
@@ -1464,7 +1509,7 @@ M <- cor(dplyr::bind_rows(cor.dat, .id = "column_label")%>%
 corrplot(M, method = "circle", type = "upper", order = "hclust")
 ```
 
-![](README_files/figure-gfm/kill%20rate-4.png)<!-- -->
+![](README_files/figure-gfm/kill%20rate-2.png)<!-- -->
 
 ## FIT COMBINED MODELS WITH KILLRATE
 
@@ -1521,23 +1566,20 @@ mods.kill.out <- readRDS(here::here("output", "mods", "kill.mods.RDS"))
 ##examine model fits
 (fitList.oSCR(mods.kill.out)%>%
   modSel.oSCR())$aic.tab%>%
-  as_tibble()
-
-##top mod
-top.mod.pred <- mods.kill.out[[2]]
-
-
-###predict Density surface
-dens.rast2.unclipped <- predict.denssurf(mod=top.mod.pred, stack=STACK)
-dens.rast2.unclipped <- aggregate(dens.rast2.unclipped, 2, fun=sum)
-dens.rast2 <- dens.rast2.unclipped*range.clip
-plot(dens.rast2)
+  as_tibble()%>%
+  kable
 ```
 
-![](README_files/figure-gfm/kill%20rate-results-1.png)<!-- -->
+| model |     logL |  K |      AIC |      dAIC |    weight |     CumWt |
+| :---- | -------: | -: | -------: | --------: | --------: | --------: |
+| 2     | 13202.74 | 38 | 26481.48 |  0.000000 | 0.7217891 | 0.7217891 |
+| 4     | 13202.69 | 39 | 26483.39 |  1.906707 | 0.2782109 | 1.0000000 |
+| 3     | 13222.49 | 38 | 26520.99 | 39.506814 | 0.0000000 | 1.0000000 |
+| 1     | 13224.11 | 37 | 26522.21 | 40.733875 | 0.0000000 | 1.0000000 |
 
 ``` r
-writeRaster(dens.rast2, here::here("output", "surface","density_v2.tif"), overwrite=TRUE)
+##top mod
+top.mod.kill <- mods.kill.out[[2]]
 ```
 
 ## TEST Bottom-up and Top-down limitation
@@ -1560,7 +1602,7 @@ bc.poly <- st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geogra
 bc <- st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Basemaps/bc/shp/province.shp")%>%
   st_transform(proj4string(STACK[[1]]))%>%
   mutate(Dis=1)%>%
-  fasterize(dens.rast2, field = "Dis", fun="first")
+  fasterize(dens.rast, field = "Dis", fun="first")
 ```
 
     ## Reading layer `province' from data source `/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Basemaps/bc/shp/province.shp' using driver `ESRI Shapefile'
@@ -1571,18 +1613,12 @@ bc <- st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geographic_
     ## geographic CRS: NAD27
 
 ``` r
-plot(bc)
-```
-
-![](README_files/figure-gfm/prep%20mask-1.png)<!-- -->
-
-``` r
 mask <- disaggregate((bc*range.clip),fact=2)
 values(mask)[values(mask)<1] <- NA
 plot(mask)
 ```
 
-![](README_files/figure-gfm/prep%20mask-2.png)<!-- -->
+![](README_files/figure-gfm/prep%20mask-1.png)<!-- -->
 
 \#\#tweak each 10% (elasticity) only where real changes are possible
 
@@ -1634,40 +1670,13 @@ sum(values(bc.dens),na.rm=TRUE)
 ``` r
 #STACK.sens[["bb_scale"]] <- STACK.sens[["bb_scale"]]*0.99
 
-plot(bc.dens*4000)
-```
 
-![](README_files/figure-gfm/tweak-1.png)<!-- -->
-
-``` r
-##plot changes
-plot(dens.snvty.bu-bc.dens)
-```
-
-![](README_files/figure-gfm/tweak-2.png)<!-- -->
-
-``` r
-plot(dens.snvty.td-bc.dens)
-```
-
-![](README_files/figure-gfm/tweak-3.png)<!-- -->
-
-``` r
 ##raster math to measure change in density
 bu <- ((dens.snvty.bu-bc.dens)/bc.dens)*100
-plot(bu)
-```
 
-![](README_files/figure-gfm/tweak-4.png)<!-- -->
-
-``` r
 td <- ((dens.snvty.td-bc.dens)/bc.dens)*100
-plot(td)
-```
 
-![](README_files/figure-gfm/tweak-5.png)<!-- -->
 
-``` r
 ###PLOT
 sens.dat <- rbind(td%>%as.data.frame(xy = TRUE)%>%mutate(Treatment="Top down", estimate=layer)%>%drop_na(estimate)%>%select(x,y,estimate, Treatment),
                   bu%>%as.data.frame(xy = TRUE)%>%mutate(Treatment="Bottom up", estimate=layer)%>%drop_na(estimate)%>%select(x, y,estimate, Treatment))
@@ -1704,25 +1713,13 @@ sens.plot <-ggplot(data=sens.dat, aes(x=Treatment, y=estimate, fill=Treatment))+
 sens.plot
 ```
 
-![](README_files/figure-gfm/tweak-6.png)<!-- -->
+![](README_files/figure-gfm/tweak-1.png)<!-- -->
 
 ``` r
 #ggsave(here::here("output", "plots", "limiting_influence.png"), height=4, width=4, unit="in")
 
 
 ###MAP
-plot((bu-td)>0)
-```
-
-![](README_files/figure-gfm/tweak-7.png)<!-- -->
-
-``` r
-plot((bu-td)<0)
-```
-
-![](README_files/figure-gfm/tweak-8.png)<!-- -->
-
-``` r
 bu.plot.sens <- sens.dat%>%
   filter(Treatment%in%"Bottom up")%>%
   ggplot(data = .)+
@@ -1785,7 +1782,7 @@ ggarrange(sens.plot, bu.plot.sens,td.plot.sens,
           widths=c(1,1.2,1.2))
 ```
 
-![](README_files/figure-gfm/tweak-9.png)<!-- -->
+![](README_files/figure-gfm/tweak-2.png)<!-- -->
 
 ``` r
 ggsave(here::here("output", "plots", "elas.plot_plusmaps.png"), height=4, width=11, unit="in")
@@ -1989,6 +1986,7 @@ mask5k <- mask5k%>%
   aggregate(10,mean)%>%
   projectRaster(bc.dens.est)
 mask5k <- (mask5k>=0)*aggregate(bc,5,mean)
+
 ##in extant range
 sum(values(bc.dens.est*mask5k),na.rm=TRUE)
 ```
@@ -2127,103 +2125,24 @@ All%>%
 ## kill rates
 
 ``` r
-##function to estimate different kill rates (spatial, sexes, and type of kill)
-killrate2 <- function(scale=scale, years=years, sex=sex, killcodes=killcodes, dens=dens){
-  res <- res(dens)[1]
-  kill.res <- (scale/res)%>%round(0)
-  if(kill.res%%2==0){kill.res <- kill.res+1} ##deal with if not odd # (required by raster::focal())
-  
-  dens.res <- ((scale+6000)/res)%>%round(0) ##add extra to account for home range width
-  if(dens.res%%2==0){dens.res <- dens.res+1} ##deal with if not odd # (required by raster::focal())
-  
-  
-  kill <- All%>%
-    filter(YEAR%in%years & KILL_CODE%in%killcodes & SEX%in%sex)%>%
-    as("Spatial")%>%
-    raster::rasterize(y=dens, field = "count", fun=sum)
-  
-  kill[is.na(kill)] <- 0
-  #kill <- kill*range.clip
-  
-  kill <-   (raster::focal(x=kill, w=matrix(1,nrow=kill.res, ncol=kill.res), fun=sum, na.rm=TRUE, pad=TRUE)/length(years))
-  
-  dens <- dens%>%
-    focal(w=matrix(1,nrow=dens.res,ncol=dens.res), fun=sum, na.rm=TRUE, pad=TRUE)
-  
-  rate <-(kill/dens)*100
-  
-  if(all(sex==c("F"))){
-    rate <-(kill/(dens*0.6))*100
-  }
-  rate[rate>100] <-100
-  
-  rate <- projectRaster(rate,dens)
-  
-  return(rate)
-}
+hk <- killrate(scale=50E3, years=c(1998:2018), sex=c("F", "M"), killcodes=c(1), dens=dens.rast.unclipped*aggregate(mask.ms.buff,2, fun=max))
+nhk <- killrate(scale=50E3, years=c(1998:2018), sex=c("F", "M"), killcodes=c(2,4,5,6,9), dens=dens.rast.unclipped*aggregate(mask.ms.buff,2, fun=max))
 
-
-
-dens.rast2 <- predict.denssurf(mod=top.mod.eco, stack=STACK)
-
-##aggregate
-dens.rast2 <- aggregate(dens.rast2, 2, fun=sum)
-
-
-##clip to range
-range <- st_read(here::here("Data_Prep", "Spatial_Layers_ProvSECR", "range.shp"))%>%
-  st_transform(proj4string(dens.rast))%>%
-  st_buffer(15E3)%>%
-  fasterize(dens.rast2, field = "Dis", fun="first")
-```
-
-    ## Reading layer `range' from data source `/Users/clayton.lamb/Google Drive/Documents/University/U_A/Analyses/BC_Wide_PhD/Prov_Grizz_density_oSCR/Grizzly-Density-BC/Data_Prep/Spatial_Layers_ProvSECR/range.shp' using driver `ESRI Shapefile'
-    ## Simple feature collection with 1 feature and 1 field
-    ## geometry type:  MULTIPOLYGON
-    ## dimension:      XY
-    ## bbox:           xmin: -3932825 ymin: 478343.3 xmax: 552000 ymax: 4406030
-    ## projected CRS:  Albers
-
-``` r
-## habitat mask
-hab <- raster(here::here("Data_Prep", "Spatial_Layers_ProvSECR", "clean", "nonhab.tif"))%>%
-  projectRaster(dens.rast2)
-hab <- hab<=0.5
-hab[hab<1] <-0
-
-plot(hab)
-```
-
-![](README_files/figure-gfm/kill%20rates-1.png)<!-- -->
-
-``` r
-mask.buff <- hab*range
-plot(mask.buff)
-```
-
-![](README_files/figure-gfm/kill%20rates-2.png)<!-- -->
-
-``` r
-rm(range)
-#rm(hab)
-
-dens.rast2 <- dens.rast2*mask.buff
-
-
-nhk <- killrate2(scale=50E3, years=c(1998:2018), sex=c("F", "M"), killcodes=c(2,4,5,6,9), dens=dens.rast2)*bc
-hk <- killrate2(scale=50E3, years=c(1998:2018), sex=c("F", "M"), killcodes=c(1), dens=dens.rast2)*bc
+##clip to bc
+hk <- hk*(projectRaster(bc,hk))
+nhk <- nhk*(projectRaster(bc,nhk))
 
 ##get rates
 mean(values(nhk),na.rm=TRUE)
 ```
 
-    ## [1] 0.6694512
+    ## [1] 0.3171837
 
 ``` r
 mean(values(hk),na.rm=TRUE)
 ```
 
-    ## [1] 1.259755
+    ## [1] 1.108014
 
 ``` r
 kill.dat <- rbind(nhk%>%as.data.frame(xy = TRUE)%>%mutate(type="nonhunter", estimate=layer)%>%drop_na(estimate)%>%select(x,y,estimate, type),
@@ -2283,7 +2202,7 @@ hk.plot <- kill.dat%>%
         strip.text = element_text(face="bold"))+
   guides(fill = guide_colourbar(barwidth = 0.8, barheight = 4))
 
-dens.plot.dat <- (dens.rast2*bc)%>%
+dens.plot.dat <- (dens.rast*bc)%>%
   as.data.frame(xy = TRUE)%>%
   mutate(layer=layer*1000)%>%
   drop_na(layer)%>%
@@ -2322,11 +2241,17 @@ ggarrange(dens.plot,
           heights=c(2,1))
 ```
 
-![](README_files/figure-gfm/kill%20rates-3.png)<!-- -->
+![](README_files/figure-gfm/kill%20rates-1.png)<!-- -->
 
 ``` r
 ggsave(here::here("output", "plots", "density.kill.png"), height=8, width=8, unit="in")
 ```
+
+\#\#\#Hunter mortality rate was `round(mean(values(hk),na.rm=TRUE),1)`%
+and the non-hunter mortality rate was
+`round(mean(values(nhk),na.rm=TRUE),1)`%. We know that the hunter
+mortalities are reported at, or near, 100%, while non-hunter mortalities
+can be as low as 12-50% reporting.
 
 \#\#Get bear density/abundance in each GBPU
 
@@ -2386,12 +2311,12 @@ gbpu_ests <- gbpu%>%
                              filter(YEAR%in%1998:2018 & KILL_CODE%in%1)%>%
                              mutate(count=count/length(1998:2018))%>%
                              as("Spatial")%>%
-                             raster::rasterize(y=dens.rast2, field = "count", fun=sum))$extract(gbpu, fun=function(x) sum(x, na.rm=TRUE)))%>%round(1),
+                             raster::rasterize(y=dens.rast, field = "count", fun=sum))$extract(gbpu, fun=function(x) sum(x, na.rm=TRUE)))%>%round(1),
         nonhunter.kill=(velox(All%>%
                              filter(YEAR%in%1998:2020 & KILL_CODE%in%c(2,4,5,6,9))%>%
                              mutate(count=count/length(1998:2018))%>%
                              as("Spatial")%>%
-                             raster::rasterize(y=dens.rast2, field = "count", fun=sum))$extract(gbpu, fun=function(x) sum(x, na.rm=TRUE)))%>%round(1),
+                             raster::rasterize(y=dens.rast, field = "count", fun=sum))$extract(gbpu, fun=function(x) sum(x, na.rm=TRUE)))%>%round(1),
         hunter.rate= (100*(hunter.kill/abundance))%>%round(1),
         nonhunter.rate= (100*(nonhunter.kill/abundance))%>%round(1),
         total.rate=hunter.rate+nonhunter.rate)%>%
@@ -2406,19 +2331,24 @@ filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
 
 
 ##total estimate using GBPU's
-gbpu_ests%>%
+pop.est <- gbpu_ests%>%
   filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
-  summarise_at(7:9, sum)
+  summarise_at(7:9, sum)%>%
+  mutate(est=paste0(abundance, " (95% CI: ",abundance.lwr,"-",abundance.upr,")" ))%>%
+  pull(est)
+  
+
+##total estimate without ppl within extant range using GBPU's
+popest.extant.nohuman <- gbpu_ests%>%
+  filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
+  summarise_at("abundance.nohuman", sum)%>%
+  pull(abundance.nohuman)
+
 
 ##total estimate without ppl within range using GBPU's
-gbpu_ests%>%
-  filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
-  summarise_at("abundance.nohuman", sum)
-
-
-##total estimate without ppl within range using GBPU's
-gbpu_ests%>%
-  summarise_at("abundance.nohuman.allrange", sum)
+popest.all.nohuman <- gbpu_ests%>%
+  summarise_at("abundance.nohuman.allrange", sum)%>%
+  pull(abundance.nohuman.allrange)
 
 
 gbpu_ests%>%
@@ -2595,6 +2525,14 @@ historic <- read_csv(here::here("Data_Prep","Data","old_estimates","historic_est
                       method="spearman"))
 ```
 
+\#\#\#The current population of grizzly bears in BC is estimated as
+`pop.est`. If the negative effects of human habitation were removed
+within the current extent of grizzly bear range in BC,
+`popest.extant.nohuman` grizzly bears could be presesnt. If the negative
+effects of human habitation were removed within the current and historic
+range of bears, and they re-occupied these areas, there could be
+`popest.all.nohuman` grizzly bears presesnt.
+
 ## TEST Secure Habitat Breakpoint
 
 ``` r
@@ -2739,15 +2677,8 @@ get.real(mods.secure.out[[i]], type = "dens", newdata =a , d.factor = 40)%>%
             lwr=sum(dens.lwr),
             upr=sum(dens.upr)), aes(x=bp,y=estimate,ymin=lwr,ymax=upr))+
   theme_ipsum()+
-  geom_linerange()
+  geom_linerange()+
+  geom_point(size=3)
 ```
 
 ![](README_files/figure-gfm/plot%20breakpoint-4.png)<!-- -->
-
-``` r
-  geom_point()
-```
-
-    ## geom_point: na.rm = FALSE
-    ## stat_identity: na.rm = FALSE
-    ## position_identity

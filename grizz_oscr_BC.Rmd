@@ -38,6 +38,7 @@ library(rworldmap)
 library(maps)
 library(ggsflabel)
 library(oSCR)
+library(knitr)
 library(tidyverse)
 
 
@@ -194,7 +195,6 @@ inset <- ggplot() +
         plot.background = element_rect(fill = "transparent",colour = NA))+
   xlim(-1E6,5.3E6)+
   ylim(-2E6,4.5E6)
-inset 
 
 
 map <- ggRGB(a, r=1, g=2, b=3)+
@@ -390,8 +390,8 @@ ms.ssDF <- ms.clipmask(ssDF=ms.ssDF,
 
 saveRDS(ms.ssDF, here::here("Data_Prep", "Spatial_Layers_ProvSECR","clean","state_space.rds"))
 
-ggplot(data=ms.ssDF[[31]],aes(x=X,y=Y,fill=Tr))+geom_raster()+
-  scale_fill_gradientn(colors=rev(viridis_pal()(20)))+theme_minimal()
+# ggplot(data=ms.ssDF[[31]],aes(x=X,y=Y,fill=Tr))+geom_raster()+
+#   scale_fill_gradientn(colors=rev(viridis_pal()(20)))+theme_minimal()
 
 
 ###cleanup objects
@@ -476,7 +476,7 @@ corrplot(M, method = "circle", type = "upper", order = "hclust")
 ```
 
 ## ADD POOLED SESSION SPECIFICATION AND SUMMARIZE CAPTURE DATA AGAIN, MAKE SURE ALL IS GOOD
-```{r summarise sessions, message=FALSE, warning=FALSE}
+```{r summarise sessions, warning=FALSE}
 ##############################
 #### POOLED DENSITY SPECIFICATION
 ##############################
@@ -512,9 +512,11 @@ saveRDS(sess.pool.mod, here::here("output", "mods", "sess.pool.mod.RDS"))
 #load models
 sess.pool.mod <- readRDS(here::here("output", "mods", "sess.pool.mod.RDS"))
 
+
+
 ###predict results
 #make a dataframe of values predictions
-pred.df <- data.frame(session=filelist%>%str_split("/", simplify = TRUE)%>%as_tibble%>%pull(V10)%>%str_sub(1,-5),
+pred.df <- data.frame(session=filelist%>%str_split("/", simplify = TRUE)%>%as_tibble%>%pull(V16)%>%str_sub(1,-5),
                         pool = as.character(d.pool),
                         d.pool = as.character(d.pool),
                       sex=factor(1,levels=c(0,1)),
@@ -642,9 +644,15 @@ saveRDS(mods.det.out, here::here("output", "mods", "det.mods.RDS"))
 ```{r test detection-plot, message=FALSE, warning=FALSE, include=TRUE}
 mods.det.out <- readRDS(here::here("output", "mods", "det.mods.RDS"))
 
+##fit
+(fitList.oSCR(mods.det.out)%>%
+  modSel.oSCR())$aic.tab%>%
+  as_tibble()%>%
+  kable()
+
 ###predict results
 #make a dataframe of values predictions
-pred.df <- data.frame(session=filelist%>%str_split("/", simplify = TRUE)%>%as_tibble%>%pull(V10)%>%str_sub(1,-5),
+pred.df <- data.frame(session=filelist%>%str_split("/", simplify = TRUE)%>%as_tibble%>%pull(V16)%>%str_sub(1,-5),
                         pool = as.character(d.pool),
                         d.pool = as.character(d.pool),
                         ph.pool = as.character(ph.pool),
@@ -890,7 +898,8 @@ mods.d.out <- readRDS(here::here("output", "mods", "dens.mods.RDS"))
 ##examine model fits
 (fitList.oSCR(mods.d.out)%>%
   modSel.oSCR())$aic.tab%>%
-  as_tibble()
+  as_tibble()%>%
+  kable()
 ```
 
 
@@ -957,7 +966,8 @@ mods.d.alt.out <- readRDS(here::here("output", "mods", "dens.mods.alt.RDS"))
 ##examine model fits
 (fitList.oSCR(mods.d.alt.out)%>%
   modSel.oSCR())$aic.tab%>%
-  as_tibble()
+  as_tibble()%>%
+  kable
 
 ##save top mod
 top.mod.eco <- mods.d.alt.out[[5]]
@@ -1031,7 +1041,6 @@ dens.rast.unclipped <- aggregate(dens.rast.unclipped, 2, fun=sum)
 range.clip <- mask.ms%>%aggregate(2, fun=max)
 dens.rast <- dens.rast.unclipped*range.clip
 plot(dens.rast)
-sum(values(dens.rast), na.rm=TRUE)
 writeRaster(dens.rast, here::here("output", "surface","density_v1.tif"), overwrite=TRUE)
 ```
 
@@ -1122,7 +1131,7 @@ nhk.big <- killrate(scale=150E3, years=c(1998:2018), sex=c("F", "M"), killcodes=
 kill.stack <- stack(hk.big, nhk.big)
 names(kill.stack) <- c("hk.big", "nhk.big")
 
-plot(kill.stack)
+#plot(kill.stack)
 rm(hk.big)
 rm(nhk.big)
 
@@ -1137,7 +1146,7 @@ for(i in 1:length(layers)){
   print(names(a))
 }
 
-plot(kill.stack)
+#plot(kill.stack)
 
 
 
@@ -1157,7 +1166,7 @@ ms.ssDF <- ms.addcovs(ssDF=ms.ssDF,
 
 
 ms.ssDF[[31]]%>%
-  select(X, Y,paste(c(names(kill.stack)), sep=""))%>%
+  select(X, Y,hk.big, nhk.big)%>%
   gather("vari", "value", -X,-Y)%>%
   ggplot(aes(x=X,y=Y,fill=value))+geom_raster()+
   scale_fill_gradientn(colors=rev(viridis_pal()(20)))+
@@ -1235,18 +1244,11 @@ mods.kill.out <- readRDS(here::here("output", "mods", "kill.mods.RDS"))
 ##examine model fits
 (fitList.oSCR(mods.kill.out)%>%
   modSel.oSCR())$aic.tab%>%
-  as_tibble()
+  as_tibble()%>%
+  kable
 
 ##top mod
-top.mod.pred <- mods.kill.out[[2]]
-
-
-###predict Density surface
-dens.rast2.unclipped <- predict.denssurf(mod=top.mod.pred, stack=STACK)
-dens.rast2.unclipped <- aggregate(dens.rast2.unclipped, 2, fun=sum)
-dens.rast2 <- dens.rast2.unclipped*range.clip
-plot(dens.rast2)
-writeRaster(dens.rast2, here::here("output", "surface","density_v2.tif"), overwrite=TRUE)
+top.mod.kill <- mods.kill.out[[2]]
 ```
 
 
@@ -1262,9 +1264,7 @@ bc.poly <- st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geogra
 bc <- st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Basemaps/bc/shp/province.shp")%>%
   st_transform(proj4string(STACK[[1]]))%>%
   mutate(Dis=1)%>%
-  fasterize(dens.rast2, field = "Dis", fun="first")
-
-plot(bc)
+  fasterize(dens.rast, field = "Dis", fun="first")
 
 mask <- disaggregate((bc*range.clip),fact=2)
 values(mask)[values(mask)<1] <- NA
@@ -1316,18 +1316,11 @@ bc.dens <- bc.dens*mask
 sum(values(bc.dens),na.rm=TRUE)
 #STACK.sens[["bb_scale"]] <- STACK.sens[["bb_scale"]]*0.99
 
-plot(bc.dens*4000)
-
-##plot changes
-plot(dens.snvty.bu-bc.dens)
-plot(dens.snvty.td-bc.dens)
 
 ##raster math to measure change in density
 bu <- ((dens.snvty.bu-bc.dens)/bc.dens)*100
-plot(bu)
 
 td <- ((dens.snvty.td-bc.dens)/bc.dens)*100
-plot(td)
 
 
 ###PLOT
@@ -1368,10 +1361,6 @@ sens.plot
 
 
 ###MAP
-plot((bu-td)>0)
-plot((bu-td)<0)
-
-
 bu.plot.sens <- sens.dat%>%
   filter(Treatment%in%"Bottom up")%>%
   ggplot(data = .)+
@@ -1617,6 +1606,7 @@ mask5k <- mask5k%>%
   aggregate(10,mean)%>%
   projectRaster(bc.dens.est)
 mask5k <- (mask5k>=0)*aggregate(bc,5,mean)
+
 ##in extant range
 sum(values(bc.dens.est*mask5k),na.rm=TRUE)
 sum(values(bc.dens.lwr*mask5k),na.rm=TRUE)
@@ -1699,75 +1689,12 @@ All%>%
 
 ## kill rates
 ```{r kill rates, message=FALSE, warning=FALSE}
+hk <- killrate(scale=50E3, years=c(1998:2018), sex=c("F", "M"), killcodes=c(1), dens=dens.rast.unclipped*aggregate(mask.ms.buff,2, fun=max))
+nhk <- killrate(scale=50E3, years=c(1998:2018), sex=c("F", "M"), killcodes=c(2,4,5,6,9), dens=dens.rast.unclipped*aggregate(mask.ms.buff,2, fun=max))
 
-
-##function to estimate different kill rates (spatial, sexes, and type of kill)
-killrate2 <- function(scale=scale, years=years, sex=sex, killcodes=killcodes, dens=dens){
-  res <- res(dens)[1]
-  kill.res <- (scale/res)%>%round(0)
-  if(kill.res%%2==0){kill.res <- kill.res+1} ##deal with if not odd # (required by raster::focal())
-  
-  dens.res <- ((scale+6000)/res)%>%round(0) ##add extra to account for home range width
-  if(dens.res%%2==0){dens.res <- dens.res+1} ##deal with if not odd # (required by raster::focal())
-  
-  
-  kill <- All%>%
-    filter(YEAR%in%years & KILL_CODE%in%killcodes & SEX%in%sex)%>%
-    as("Spatial")%>%
-    raster::rasterize(y=dens, field = "count", fun=sum)
-  
-  kill[is.na(kill)] <- 0
-  #kill <- kill*range.clip
-  
-  kill <-   (raster::focal(x=kill, w=matrix(1,nrow=kill.res, ncol=kill.res), fun=sum, na.rm=TRUE, pad=TRUE)/length(years))
-  
-  dens <- dens%>%
-    focal(w=matrix(1,nrow=dens.res,ncol=dens.res), fun=sum, na.rm=TRUE, pad=TRUE)
-  
-  rate <-(kill/dens)*100
-  
-  if(all(sex==c("F"))){
-    rate <-(kill/(dens*0.6))*100
-  }
-  rate[rate>100] <-100
-  
-  rate <- projectRaster(rate,dens)
-  
-  return(rate)
-}
-
-
-
-dens.rast2 <- predict.denssurf(mod=top.mod.eco, stack=STACK)
-
-##aggregate
-dens.rast2 <- aggregate(dens.rast2, 2, fun=sum)
-
-
-##clip to range
-range <- st_read(here::here("Data_Prep", "Spatial_Layers_ProvSECR", "range.shp"))%>%
-  st_transform(proj4string(dens.rast))%>%
-  st_buffer(15E3)%>%
-  fasterize(dens.rast2, field = "Dis", fun="first")
-
-## habitat mask
-hab <- raster(here::here("Data_Prep", "Spatial_Layers_ProvSECR", "clean", "nonhab.tif"))%>%
-  projectRaster(dens.rast2)
-hab <- hab<=0.5
-hab[hab<1] <-0
-
-plot(hab)
-
-mask.buff <- hab*range
-plot(mask.buff)
-rm(range)
-#rm(hab)
-
-dens.rast2 <- dens.rast2*mask.buff
-
-
-nhk <- killrate2(scale=50E3, years=c(1998:2018), sex=c("F", "M"), killcodes=c(2,4,5,6,9), dens=dens.rast2)*bc
-hk <- killrate2(scale=50E3, years=c(1998:2018), sex=c("F", "M"), killcodes=c(1), dens=dens.rast2)*bc
+##clip to bc
+hk <- hk*(projectRaster(bc,hk))
+nhk <- nhk*(projectRaster(bc,nhk))
 
 ##get rates
 mean(values(nhk),na.rm=TRUE)
@@ -1831,7 +1758,7 @@ hk.plot <- kill.dat%>%
         strip.text = element_text(face="bold"))+
   guides(fill = guide_colourbar(barwidth = 0.8, barheight = 4))
 
-dens.plot.dat <- (dens.rast2*bc)%>%
+dens.plot.dat <- (dens.rast*bc)%>%
   as.data.frame(xy = TRUE)%>%
   mutate(layer=layer*1000)%>%
   drop_na(layer)%>%
@@ -1872,6 +1799,7 @@ ggarrange(dens.plot,
 ggsave(here::here("output", "plots", "density.kill.png"), height=8, width=8, unit="in")
 ```
 
+###Hunter mortality rate was `round(mean(values(hk),na.rm=TRUE),1)`% and the non-hunter mortality rate was `round(mean(values(nhk),na.rm=TRUE),1)`%. We know that the hunter mortalities are reported at, or near, 100%, while non-hunter mortalities can be as low as 12-50% reporting.
 
 
 ##Get bear density/abundance in each GBPU
@@ -1911,12 +1839,12 @@ gbpu_ests <- gbpu%>%
                              filter(YEAR%in%1998:2018 & KILL_CODE%in%1)%>%
                              mutate(count=count/length(1998:2018))%>%
                              as("Spatial")%>%
-                             raster::rasterize(y=dens.rast2, field = "count", fun=sum))$extract(gbpu, fun=function(x) sum(x, na.rm=TRUE)))%>%round(1),
+                             raster::rasterize(y=dens.rast, field = "count", fun=sum))$extract(gbpu, fun=function(x) sum(x, na.rm=TRUE)))%>%round(1),
         nonhunter.kill=(velox(All%>%
                              filter(YEAR%in%1998:2020 & KILL_CODE%in%c(2,4,5,6,9))%>%
                              mutate(count=count/length(1998:2018))%>%
                              as("Spatial")%>%
-                             raster::rasterize(y=dens.rast2, field = "count", fun=sum))$extract(gbpu, fun=function(x) sum(x, na.rm=TRUE)))%>%round(1),
+                             raster::rasterize(y=dens.rast, field = "count", fun=sum))$extract(gbpu, fun=function(x) sum(x, na.rm=TRUE)))%>%round(1),
         hunter.rate= (100*(hunter.kill/abundance))%>%round(1),
         nonhunter.rate= (100*(nonhunter.kill/abundance))%>%round(1),
         total.rate=hunter.rate+nonhunter.rate)%>%
@@ -1931,19 +1859,24 @@ filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
 
 
 ##total estimate using GBPU's
-gbpu_ests%>%
+pop.est <- gbpu_ests%>%
   filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
-  summarise_at(7:9, sum)
+  summarise_at(7:9, sum)%>%
+  mutate(est=paste0(abundance, " (95% CI: ",abundance.lwr,"-",abundance.upr,")" ))%>%
+  pull(est)
+  
+
+##total estimate without ppl within extant range using GBPU's
+popest.extant.nohuman <- gbpu_ests%>%
+  filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
+  summarise_at("abundance.nohuman", sum)%>%
+  pull(abundance.nohuman)
+
 
 ##total estimate without ppl within range using GBPU's
-gbpu_ests%>%
-  filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
-  summarise_at("abundance.nohuman", sum)
-
-
-##total estimate without ppl within range using GBPU's
-gbpu_ests%>%
-  summarise_at("abundance.nohuman.allrange", sum)
+popest.all.nohuman <- gbpu_ests%>%
+  summarise_at("abundance.nohuman.allrange", sum)%>%
+  pull(abundance.nohuman.allrange)
 
 
 gbpu_ests%>%
@@ -2093,7 +2026,7 @@ historic <- read_csv(here::here("Data_Prep","Data","old_estimates","historic_est
                       method="spearman"))
     
 ```
-
+###The current population of grizzly bears in BC is estimated as `pop.est`. If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, `popest.extant.nohuman` grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be `popest.all.nohuman` grizzly bears presesnt.
 
 
 ## TEST Secure Habitat Breakpoint
@@ -2232,6 +2165,6 @@ get.real(mods.secure.out[[i]], type = "dens", newdata =a , d.factor = 40)%>%
             lwr=sum(dens.lwr),
             upr=sum(dens.upr)), aes(x=bp,y=estimate,ymin=lwr,ymax=upr))+
   theme_ipsum()+
-  geom_linerange()
-  geom_point()
+  geom_linerange()+
+  geom_point(size=3)
 ```
