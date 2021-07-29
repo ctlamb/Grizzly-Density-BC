@@ -1,7 +1,7 @@
 Grizzly bear BC SCR results
 ================
 Clayton Lamb
-28 July, 2021
+29 July, 2021
 
 ## Load Packages & Data
 
@@ -1662,12 +1662,6 @@ STACK.sens <- STACK.sens*mask
 names(STACK.sens)<-names
 bc.dens <- predict.denssurf(mod=top.mod.eco, stack=STACK.sens)
 bc.dens <- bc.dens*mask
-sum(values(bc.dens),na.rm=TRUE)
-```
-
-    ## [1] 16556.54
-
-``` r
 #STACK.sens[["bb_scale"]] <- STACK.sens[["bb_scale"]]*0.99
 
 
@@ -1773,16 +1767,16 @@ td.plot.sens <- sens.dat%>%
         legend.position = c(0.9,0.7),
         strip.background=element_rect(colour="#f0f0f0",fill="#f0f0f0"),
         strip.text = element_text(face="bold"))
+```
 
-
-
+``` r
 ggarrange(sens.plot, bu.plot.sens,td.plot.sens,
           nrow=1, ncol=3,
           labels="AUTO",
           widths=c(1,1.2,1.2))
 ```
 
-![](README_files/figure-gfm/tweak-2.png)<!-- -->
+![](README_files/figure-gfm/plot%20together%20-1.png)<!-- -->
 
 ``` r
 ggsave(here::here("output", "plots", "elas.plot_plusmaps.png"), height=4, width=11, unit="in")
@@ -1894,7 +1888,7 @@ pred.dat%>%
                     strip.text = element_text(face="bold"))
 ```
 
-![](README_files/figure-gfm/margunak%20effects%20-1.png)<!-- -->
+![](README_files/figure-gfm/marginal%20effects%20-1.png)<!-- -->
 
 ``` r
 ggsave(here::here("output", "plots", "individ_response.png"), height=5, width=6, unit="in")
@@ -1985,25 +1979,25 @@ mask5k <- mask5k>=0
 mask5k <- mask5k%>%
   aggregate(10,mean)%>%
   projectRaster(bc.dens.est)
-mask5k <- (mask5k>=0)*aggregate(bc,5,mean)
+mask5k <- (mask5k>=0)*(aggregate(bc,5,sum)>12.5)
 
 ##in extant range
 sum(values(bc.dens.est*mask5k),na.rm=TRUE)
 ```
 
-    ## [1] 18093.77
+    ## [1] 17824.37
 
 ``` r
 sum(values(bc.dens.lwr*mask5k),na.rm=TRUE)
 ```
 
-    ## [1] 15370.53
+    ## [1] 15145.23
 
 ``` r
 sum(values(bc.dens.upr*mask5k),na.rm=TRUE)
 ```
 
-    ## [1] 21342.05
+    ## [1] 21018.97
 
 ``` r
 ##do again but remove human footprint
@@ -2070,43 +2064,71 @@ sum(values(bc.dens.nohum.est),na.rm=TRUE)
 sum(values(bc.dens.nohum.est*mask5k),na.rm=TRUE)
 ```
 
-    ## [1] 22615.36
+    ## [1] 22290.39
 
 ``` r
 sum(values(bc.dens.nohum.lwr*mask5k),na.rm=TRUE)
 ```
 
-    ## [1] 18686.58
+    ## [1] 18421.19
 
 ``` r
 sum(values(bc.dens.nohum.upr*mask5k),na.rm=TRUE)
 ```
 
-    ## [1] 27442.8
+    ## [1] 27043.58
 
 ``` r
 ##in all BC
-bc5k <-bc
-bc5k <- bc5k%>%
-  projectRaster(bc.dens.nohum.est)
+gbpu<-st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp")%>%
+  filter(GBPUSTATUS%in%c("Viable", "Threatened") & GBPU_VERS%in%"2012")%>%
+  rbind(st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp")%>%
+          filter(GBPUSTATUS%in%c("Extirpated") & GBPU_VERS%in%"2012")%>%
+          mutate(GBPU_NAME=c("Peace","Okanagan","South Coast","Lower Mainland")))%>%
+  drop_na(GBPU_NAME)%>%
+  select(GBPU_NAME,GBPUSTATUS)%>%
+  mutate(count=1)%>%
+  group_by(GBPU_NAME,GBPUSTATUS)%>%
+  summarise(count=mean(count))%>%
+  ungroup()
+```
 
-###Need to get rid of the islands though..
+    ## Reading layer `GBPU_polygon' from data source `/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp' using driver `ESRI Shapefile'
+    ## Simple feature collection with 278 features and 10 fields
+    ## geometry type:  POLYGON
+    ## dimension:      XYZ
+    ## bbox:           xmin: 283580.2 ymin: 309888.4 xmax: 2032694 ymax: 1733502
+    ## z_range:        zmin: 0 zmax: 0
+    ## projected CRS:  NAD83 / BC Albers
+    ## Reading layer `GBPU_polygon' from data source `/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp' using driver `ESRI Shapefile'
+    ## Simple feature collection with 278 features and 10 fields
+    ## geometry type:  POLYGON
+    ## dimension:      XYZ
+    ## bbox:           xmin: 283580.2 ymin: 309888.4 xmax: 2032694 ymax: 1733502
+    ## z_range:        zmin: 0 zmax: 0
+    ## projected CRS:  NAD83 / BC Albers
+
+``` r
+bc5k <- fasterize(gbpu, bc.dens.nohum.est, field = "count", fun="first")
+
+
+###across all areas that had bears
 sum(values(bc.dens.nohum.est*bc5k),na.rm=TRUE)
 ```
 
-    ## [1] 26562.16
+    ## [1] 25294.61
 
 ``` r
 sum(values(bc.dens.nohum.lwr*bc5k),na.rm=TRUE)
 ```
 
-    ## [1] 21749.87
+    ## [1] 20802.18
 
 ``` r
 sum(values(bc.dens.nohum.upr*bc5k),na.rm=TRUE)
 ```
 
-    ## [1] 32543.66
+    ## [1] 30843.6
 
 ``` r
 ##get kill rates
@@ -2122,7 +2144,9 @@ All%>%
             rate=100*(mean(n)/sum(values(bc.dens.nohum.est*mask5k),na.rm=TRUE)))
 ```
 
-## kill rates
+### The current population of grizzly bears in BC is estimated as `paste0(sum(values(bc.dens.est*mask5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.lwr*mask5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.upr*mask5k),na.rm=TRUE)%>%round(0),")")`. If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, `paste0(sum(values(bc.dens.nohum.est*mask5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.nohum.lwr*mask5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.nohum.upr*mask5k),na.rm=TRUE)%>%round(0),")")` grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be `paste0(sum(values(bc.dens.nohum.est*bc5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.nohum.lwr*bc5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.nohum.upr*bc5k),na.rm=TRUE)%>%round(0),")")` grizzly bears presesnt.
+
+## Kill rates
 
 ``` r
 hk <- killrate(scale=50E3, years=c(1998:2018), sex=c("F", "M"), killcodes=c(1), dens=dens.rast.unclipped*aggregate(mask.ms.buff,2, fun=max))
@@ -2247,42 +2271,9 @@ ggarrange(dens.plot,
 ggsave(here::here("output", "plots", "density.kill.png"), height=8, width=8, unit="in")
 ```
 
-\#\#\#Hunter mortality rate was `round(mean(values(hk),na.rm=TRUE),1)`%
-and the non-hunter mortality rate was
-`round(mean(values(nhk),na.rm=TRUE),1)`%. We know that the hunter
-mortalities are reported at, or near, 100%, while non-hunter mortalities
-can be as low as 12-50% reporting.
+### Hunter mortality rate was `round(mean(values(hk),na.rm=TRUE),1)`% and the non-hunter mortality rate was `round(mean(values(nhk),na.rm=TRUE),1)`%. We know that the hunter mortalities are reported at, or near, 100%, while non-hunter mortalities can be as low as 12-50% reporting.
 
-\#\#Get bear density/abundance in each GBPU
-
-``` r
-gbpu<-st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp")%>%
-  filter(GBPUSTATUS%in%c("Viable", "Threatened") & GBPU_VERS%in%"2012")%>%
-  rbind(st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp")%>%
-          filter(GBPUSTATUS%in%c("Extirpated") & GBPU_VERS%in%"2012")%>%
-          mutate(GBPU_NAME=c("Peace","Okanagan","South Coast","Lower Mainland")))%>%
-  drop_na(GBPU_NAME)%>%
-  select(GBPU_NAME,GBPUSTATUS)%>%
-  mutate(count=1)%>%
-  group_by(GBPU_NAME,GBPUSTATUS)%>%
-  summarise(count=mean(count))%>%
-  ungroup()
-```
-
-    ## Reading layer `GBPU_polygon' from data source `/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp' using driver `ESRI Shapefile'
-    ## Simple feature collection with 278 features and 10 fields
-    ## geometry type:  POLYGON
-    ## dimension:      XYZ
-    ## bbox:           xmin: 283580.2 ymin: 309888.4 xmax: 2032694 ymax: 1733502
-    ## z_range:        zmin: 0 zmax: 0
-    ## projected CRS:  NAD83 / BC Albers
-    ## Reading layer `GBPU_polygon' from data source `/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp' using driver `ESRI Shapefile'
-    ## Simple feature collection with 278 features and 10 fields
-    ## geometry type:  POLYGON
-    ## dimension:      XYZ
-    ## bbox:           xmin: 283580.2 ymin: 309888.4 xmax: 2032694 ymax: 1733502
-    ## z_range:        zmin: 0 zmax: 0
-    ## projected CRS:  NAD83 / BC Albers
+## Get bear density/abundance in each GBPU
 
 ``` r
 plot(gbpu["GBPU_NAME"])
@@ -2366,6 +2357,18 @@ est.plot.dat <- gbpu_ests%>%
     mutate(dif=(density.nohuman-density)/density.nohuman)
 
 est.plot <- ggplot()+
+      ggrepel::geom_label_repel(
+      data=filter(est.plot.dat,dif>0.4),
+      aes(label = name, x=density, y=density.nohuman),
+      fill = alpha(c("white"),1),
+      min.segment.length=unit(0,"lines"),
+      segment.color = "grey50",
+      hjust = 0,
+      nudge_y=20,
+      segment.curvature = -0.2,
+    segment.ncp = 3,
+      force=10,
+      size=2.5)+
     geom_point(data=est.plot.dat,aes(x=density, y=density.nohuman, color=dif*100))+
     geom_abline(intercept = 0, slope = 1)+
     expand_limits(x = 0, y = 0)+
@@ -2377,15 +2380,8 @@ est.plot <- ggplot()+
         axis.text.y = element_text(size=12),
         plot.title = element_text(size=22),
         plot.subtitle = element_text(size=17))+
-    ggrepel::geom_label_repel(
-      data=filter(est.plot.dat,dif>0.4),
-      aes(label = name, x=density, y=density.nohuman),
-      fill = alpha(c("white"),0.3),
-      min.segment.length=unit(0,"lines"),
-      hjust = 0,
-      force=50)+
   scale_color_viridis(direction=-1)+
-  labs(color="% top down")
+  labs(color="% reduction")
 
 ggarrange(
 ggarrange(est.plot,sens.plot, 
@@ -2525,13 +2521,7 @@ historic <- read_csv(here::here("Data_Prep","Data","old_estimates","historic_est
                       method="spearman"))
 ```
 
-\#\#\#The current population of grizzly bears in BC is estimated as
-`pop.est`. If the negative effects of human habitation were removed
-within the current extent of grizzly bear range in BC,
-`popest.extant.nohuman` grizzly bears could be presesnt. If the negative
-effects of human habitation were removed within the current and historic
-range of bears, and they re-occupied these areas, there could be
-`popest.all.nohuman` grizzly bears presesnt.
+### Using the GBPU boundaries: The current population of grizzly bears in BC is estimated as `pop.est`. If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, `popest.extant.nohuman` grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be `popest.all.nohuman` grizzly bears presesnt.
 
 ## TEST Secure Habitat Breakpoint
 
