@@ -2144,7 +2144,7 @@ All%>%
             rate=100*(mean(n)/sum(values(bc.dens.nohum.est*mask5k),na.rm=TRUE)))
 ```
 
-### The current population of grizzly bears in BC is estimated as `paste0(sum(values(bc.dens.est*mask5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.lwr*mask5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.upr*mask5k),na.rm=TRUE)%>%round(0),")")`. If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, `paste0(sum(values(bc.dens.nohum.est*mask5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.nohum.lwr*mask5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.nohum.upr*mask5k),na.rm=TRUE)%>%round(0),")")` grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be `paste0(sum(values(bc.dens.nohum.est*bc5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.nohum.lwr*bc5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.nohum.upr*bc5k),na.rm=TRUE)%>%round(0),")")` grizzly bears presesnt.
+### The current population of grizzly bears in BC is estimated as 17824 (95% CI:15145-21019). If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, 22290 (95% CI:18421-27044) grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be 25295 (95% CI:20802-30844) grizzly bears presesnt.
 
 ## Kill rates
 
@@ -2271,7 +2271,7 @@ ggarrange(dens.plot,
 ggsave(here::here("output", "plots", "density.kill.png"), height=8, width=8, unit="in")
 ```
 
-### Hunter mortality rate was `round(mean(values(hk),na.rm=TRUE),1)`% and the non-hunter mortality rate was `round(mean(values(nhk),na.rm=TRUE),1)`%. We know that the hunter mortalities are reported at, or near, 100%, while non-hunter mortalities can be as low as 12-50% reporting.
+### Hunter mortality rate was 1.1% and the non-hunter mortality rate was 0.3%. We know that the hunter mortalities are reported at, or near, 100%, while non-hunter mortalities can be as low as 12-50% reporting.
 
 ## Get bear density/abundance in each GBPU
 
@@ -2521,7 +2521,7 @@ historic <- read_csv(here::here("Data_Prep","Data","old_estimates","historic_est
                       method="spearman"))
 ```
 
-### Using the GBPU boundaries: The current population of grizzly bears in BC is estimated as `pop.est`. If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, `popest.extant.nohuman` grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be `popest.all.nohuman` grizzly bears presesnt.
+### Using the GBPU boundaries: The current population of grizzly bears in BC is estimated as 17611 (95% CI: 14980-20759). If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, 2.183610^{4} grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be 2.529310^{4} grizzly bears presesnt.
 
 ## TEST Secure Habitat Breakpoint
 

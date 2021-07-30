@@ -1697,7 +1697,7 @@ All%>%
   summarise(n=mean(n),
             rate=100*(mean(n)/sum(values(bc.dens.nohum.est*mask5k),na.rm=TRUE)))
 ```
-### The current population of grizzly bears in BC is estimated as `paste0(sum(values(bc.dens.est*mask5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.lwr*mask5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.upr*mask5k),na.rm=TRUE)%>%round(0),")")`. If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, `paste0(sum(values(bc.dens.nohum.est*mask5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.nohum.lwr*mask5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.nohum.upr*mask5k),na.rm=TRUE)%>%round(0),")")` grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be `paste0(sum(values(bc.dens.nohum.est*bc5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.nohum.lwr*bc5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.nohum.upr*bc5k),na.rm=TRUE)%>%round(0),")")` grizzly bears presesnt.
+### The current population of grizzly bears in BC is estimated as `r paste0(sum(values(bc.dens.est*mask5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.lwr*mask5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.upr*mask5k),na.rm=TRUE)%>%round(0),")")`. If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, `r paste0(sum(values(bc.dens.nohum.est*mask5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.nohum.lwr*mask5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.nohum.upr*mask5k),na.rm=TRUE)%>%round(0),")")` grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be `r paste0(sum(values(bc.dens.nohum.est*bc5k),na.rm=TRUE)%>%round(0)," (95% CI:",sum(values(bc.dens.nohum.lwr*bc5k),na.rm=TRUE)%>%round(0),"-",sum(values(bc.dens.nohum.upr*bc5k),na.rm=TRUE)%>%round(0),")")` grizzly bears presesnt.
 
 ## Kill rates
 ```{r kill rates, fig.height=8, fig.width=8, message=FALSE, warning=FALSE}
@@ -1811,11 +1811,11 @@ ggarrange(dens.plot,
 ggsave(here::here("output", "plots", "density.kill.png"), height=8, width=8, unit="in")
 ```
 
-### Hunter mortality rate was `round(mean(values(hk),na.rm=TRUE),1)`% and the non-hunter mortality rate was `round(mean(values(nhk),na.rm=TRUE),1)`%. We know that the hunter mortalities are reported at, or near, 100%, while non-hunter mortalities can be as low as 12-50% reporting.
+### Hunter mortality rate was `r round(mean(values(hk),na.rm=TRUE),1)`% and the non-hunter mortality rate was `r round(mean(values(nhk),na.rm=TRUE),1)`%. We know that the hunter mortalities are reported at, or near, 100%, while non-hunter mortalities can be as low as 12-50% reporting.
 
 
 ## Get bear density/abundance in each GBPU
-```{r dens by region, fig.height=11, fig.width=8, message=FALSE, warning=FALSE}
+```{r dens by region, fig.height=8, fig.width=11, message=FALSE, warning=FALSE}
 
 plot(gbpu["GBPU_NAME"])
 
@@ -2032,7 +2032,7 @@ historic <- read_csv(here::here("Data_Prep","Data","old_estimates","historic_est
                       method="spearman"))
     
 ```
-### Using the GBPU boundaries: The current population of grizzly bears in BC is estimated as `pop.est`. If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, `popest.extant.nohuman` grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be `popest.all.nohuman` grizzly bears presesnt.
+### Using the GBPU boundaries: The current population of grizzly bears in BC is estimated as `r pop.est`. If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, `r popest.extant.nohuman` grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be `r popest.all.nohuman` grizzly bears presesnt.
 
 
 ## TEST Secure Habitat Breakpoint
