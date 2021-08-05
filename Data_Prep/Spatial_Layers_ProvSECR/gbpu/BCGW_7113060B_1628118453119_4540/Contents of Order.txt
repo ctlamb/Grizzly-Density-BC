@@ -1,0 +1,15 @@
+------------------
+Order Details
+-----------------
+Order ID: 2155620
+Date: 20210804
+
+
+----------------------
+Feature Types
+-----------------------
+ - Grizzly Bear Population Units in directory GBPU_BC
+
+----------------------------
+Packaged Products
+----------------------------

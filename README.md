@@ -1,7 +1,7 @@
 Grizzly bear BC SCR results
 ================
 Clayton Lamb
-29 July, 2021
+05 August, 2021
 
 ## Load Packages & Data
 
@@ -796,20 +796,20 @@ saveRDS(mods.det.out, here::here("output", "mods", "det.mods.RDS"))
 mods.det.out <- readRDS(here::here("output", "mods", "det.mods.RDS"))
 
 ##fit
-(fitList.oSCR(mods.det.out)%>%
+(fitList.oSCR(mods.det.out, rename = TRUE)%>%
   modSel.oSCR())$aic.tab%>%
   as_tibble()%>%
   kable()
 ```
 
-| model |     logL |  K |      AIC |      dAIC | weight | CumWt |
-| :---- | -------: | -: | -------: | --------: | -----: | ----: |
-| 6     | 13296.12 | 55 | 26702.25 |    0.0000 |      1 |     1 |
-| 5     | 13442.74 | 54 | 26993.48 |  291.2347 |      0 |     1 |
-| 3     | 13480.70 | 33 | 27027.41 |  325.1614 |      0 |     1 |
-| 4     | 13634.68 | 52 | 27373.37 |  671.1184 |      0 |     1 |
-| 2     | 13694.36 | 32 | 27452.73 |  750.4786 |      0 |     1 |
-| 1     | 13898.02 | 30 | 27856.03 | 1153.7856 |      0 |     1 |
+| model                                                            |     logL |  K |      AIC |      dAIC | weight | CumWt |
+| :--------------------------------------------------------------- | -------: | -: | -------: | --------: | -----: | ----: |
+| D(\~d.pool) p(\~ph.pool + sex + b) sig(\~ph.pool + sex) asu(\~1) | 13296.12 | 55 | 26702.25 |    0.0000 |      1 |     1 |
+| D(\~d.pool) p(\~ph.pool + sex) sig(\~ph.pool + sex) asu(\~1)     | 13442.74 | 54 | 26993.48 |  291.2347 |      0 |     1 |
+| D(\~d.pool) p(\~sex + b) sig(\~sex) asu(\~1)                     | 13480.70 | 33 | 27027.41 |  325.1614 |      0 |     1 |
+| D(\~d.pool) p(\~ph.pool) sig(\~ph.pool) asu(\~1)                 | 13634.68 | 52 | 27373.37 |  671.1184 |      0 |     1 |
+| D(\~d.pool) p(\~sex) sig(\~sex) asu(\~1)                         | 13694.36 | 32 | 27452.73 |  750.4786 |      0 |     1 |
+| D(\~d.pool) p(\~1) sig(\~1) asu(\~1)                             | 13898.02 | 30 | 27856.03 | 1153.7856 |      0 |     1 |
 
 ``` r
 ###predict results
@@ -1090,6 +1090,24 @@ d%>%
 
 ![](README_files/figure-gfm/test%20detection-plot-8.png)<!-- -->
 
+## Compile AIC for detection
+
+``` r
+##all model fits to this point
+AIC.detection <- (fitList.oSCR(c(mods.det.out), rename = TRUE)%>%
+  modSel.oSCR())$aic.tab%>%
+  as_tibble()%>%
+     mutate(
+           AIC=round(AIC,1),
+           dAIC=round(dAIC,1),
+           weight=round(weight,2))%>%
+    select(-CumWt, -logL)
+AIC.detection
+
+
+write_csv(AIC.detection, here::here("output","tables","AIC.detection.csv"))
+```
+
 ## TEST CANDIDATE DENSITY MODELS
 
 ``` r
@@ -1151,7 +1169,7 @@ saveRDS(mods.d.out, here::here("output", "mods", "dens.mods.RDS"))
 mods.d.out <- readRDS(here::here("output", "mods", "dens.mods.RDS"))
  
 ##examine model fits
-(fitList.oSCR(mods.d.out)%>%
+(fitList.oSCR(mods.d.out, rename = TRUE)%>%
   modSel.oSCR())$aic.tab%>%
   as_tibble()%>%
   kable()
@@ -1219,26 +1237,67 @@ saveRDS(mods.d.alt.out, here::here("output", "mods", "dens.mods.alt.RDS"))
 mods.d.alt.out <- readRDS(here::here("output", "mods", "dens.mods.alt.RDS"))
  
 ##examine model fits
-(fitList.oSCR(mods.d.alt.out)%>%
+(fitList.oSCR(mods.d.alt.out, rename = TRUE)%>%
   modSel.oSCR())$aic.tab%>%
   as_tibble()%>%
   kable
 ```
 
-| model |     logL |  K |      AIC |      dAIC | weight | CumWt |
-| :---- | -------: | -: | -------: | --------: | -----: | ----: |
-| 5     | 13224.11 | 37 | 26522.21 |   0.00000 |      1 |     1 |
-| 2     | 13247.94 | 36 | 26567.88 |  45.66718 |      0 |     1 |
-| 3     | 13249.46 | 36 | 26570.92 |  48.71121 |      0 |     1 |
-| 8     | 13256.12 | 36 | 26584.25 |  62.03185 |      0 |     1 |
-| 1     | 13257.69 | 36 | 26587.38 |  65.16983 |      0 |     1 |
-| 7     | 13262.73 | 36 | 26597.46 |  75.24656 |      0 |     1 |
-| 4     | 13286.08 | 36 | 26644.16 | 121.94699 |      0 |     1 |
-| 6     | 13288.43 | 36 | 26648.85 | 126.64135 |      0 |     1 |
+| model                                                                                                                                                                                                   |     logL |  K |      AIC |      dAIC | weight | CumWt |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------: | -: | -------: | --------: | -----: | ----: |
+| D(\~vacc\_scale + ndvi\_scale + cc\_scale + salm\_iso\_gm\_scale + salm\_ce\_diversity\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1) | 13224.11 | 37 | 26522.21 |   0.00000 |      1 |     1 |
+| D(\~f.alt\_scale + ndvi\_scale + cc\_scale + salm\_iso\_gm\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1)                             | 13247.94 | 36 | 26567.88 |  45.66718 |      0 |     1 |
+| D(\~vacc2\_scale + ndvi\_scale + cc\_scale + salm\_iso\_gm\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1)                             | 13249.46 | 36 | 26570.92 |  48.71121 |      0 |     1 |
+| D(\~vacc\_scale + sprveg\_scale + cc\_scale + salm\_iso\_gm\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1)                            | 13256.12 | 36 | 26584.25 |  62.03185 |      0 |     1 |
+| D(\~fruit\_cal\_sum\_subset\_trim\_scale + ndvi\_scale + cc\_scale + salm\_iso\_gm\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1)     | 13257.69 | 36 | 26587.38 |  65.16983 |      0 |     1 |
+| D(\~vacc\_scale + commonveg\_scale + cc\_scale + salm\_iso\_gm\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1)                         | 13262.73 | 36 | 26597.46 |  75.24656 |      0 |     1 |
+| D(\~vacc\_scale + ndvi\_scale + cc\_scale + salm\_f95\_Adams\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1)                           | 13286.08 | 36 | 26644.16 | 121.94699 |      0 |     1 |
+| D(\~vacc\_scale + ndvi\_scale + cc\_scale + salm\_tony\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1)                                 | 13288.43 | 36 | 26648.85 | 126.64135 |      0 |     1 |
 
 ``` r
 ##save top mod
 top.mod.eco <- mods.d.alt.out[[5]]
+```
+
+## Compile AIC for density eco
+
+``` r
+##all model fits to this point
+
+AIC.dens.eco <- (fitList.oSCR(c(mods.d.out,mods.d.alt.out), rename = TRUE)%>%
+  modSel.oSCR())$aic.tab%>%
+  as_tibble()%>%
+      mutate(model=str_split(model," p",simplify = TRUE)[,1])%>%
+     mutate(model=str_replace_all(model,c("vacc_scale"="vacc-1",
+                                          "vacc2_scale"="vacc-2",
+                                          "fruit_cal_sum_subset_trim_scale"="fruit-1",
+                                          "f.alt_scale"="fruit-2",
+                                         "cc_scale"="cc",
+                                         "PPT_sp_scale"="ppt",
+                                         "caloriedens_2005_2015_scale"="ungulate",
+                                         "secure_scale"="secure",
+                                         "hum_dens_log_scale"="hum_dens_log",
+                                         "salm_iso_gm_scale"="salm_mowat",
+                                         "salm_ce_diversity_scale"="salm_diver",
+                                         "salm_f95_Adams_scale"="salm_adams",
+                                         "salm_tony_scale"="salm_hamilton",
+                                         "meat_iso_gm_scale"="meat_mowat",
+                                         "rd_dens_scale"="rd_dens",
+                                         "bb_scale"="bb",
+                                         "PINUALB_occcov_scale"="whitebark",
+                                         "ndvi_scale"="green",
+                                         " "="",
+                                         "D\\(~"="",
+                                         "\\)"=""))%>%
+             str_trim(),
+           AIC=round(AIC,1),
+           dAIC=round(dAIC,1),
+           weight=round(weight,2))%>%
+    select(-CumWt, -logL)
+
+AIC.dens.eco 
+
+write_csv(AIC.dens.eco, here::here("output","tables","AIC.dens.eco.csv"))
 ```
 
 ## CREATE EXPECTED DENSITY SURFACE
@@ -1564,22 +1623,65 @@ saveRDS(mods.kill.out, here::here("output", "mods", "kill.mods.RDS"))
 mods.kill.out <- readRDS(here::here("output", "mods", "kill.mods.RDS"))
  
 ##examine model fits
-(fitList.oSCR(mods.kill.out)%>%
+(fitList.oSCR(mods.kill.out, rename = TRUE)%>%
   modSel.oSCR())$aic.tab%>%
   as_tibble()%>%
   kable
 ```
 
-| model |     logL |  K |      AIC |      dAIC |    weight |     CumWt |
-| :---- | -------: | -: | -------: | --------: | --------: | --------: |
-| 2     | 13202.74 | 38 | 26481.48 |  0.000000 | 0.7217891 | 0.7217891 |
-| 4     | 13202.69 | 39 | 26483.39 |  1.906707 | 0.2782109 | 1.0000000 |
-| 3     | 13222.49 | 38 | 26520.99 | 39.506814 | 0.0000000 | 1.0000000 |
-| 1     | 13224.11 | 37 | 26522.21 | 40.733875 | 0.0000000 | 1.0000000 |
+| model                                                                                                                                                                                                                                    |     logL |  K |      AIC |      dAIC |    weight |     CumWt |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------: | -: | -------: | --------: | --------: | --------: |
+| D(\~vacc\_scale + ndvi\_scale + cc\_scale + salm\_iso\_gm\_scale + salm\_ce\_diversity\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale + hk.big\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1)                  | 13202.74 | 38 | 26481.48 |  0.000000 | 0.7217891 | 0.7217891 |
+| D(\~vacc\_scale + ndvi\_scale + cc\_scale + salm\_iso\_gm\_scale + salm\_ce\_diversity\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale + nhk.big\_scale + hk.big\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1) | 13202.69 | 39 | 26483.39 |  1.906707 | 0.2782109 | 1.0000000 |
+| D(\~vacc\_scale + ndvi\_scale + cc\_scale + salm\_iso\_gm\_scale + salm\_ce\_diversity\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale + nhk.big\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1)                 | 13222.49 | 38 | 26520.99 | 39.506814 | 0.0000000 | 1.0000000 |
+| D(\~vacc\_scale + ndvi\_scale + cc\_scale + salm\_iso\_gm\_scale + salm\_ce\_diversity\_scale + secure\_scale + hum\_dens\_log\_scale + bb\_scale) p(\~sex + ph.pool + b) sig(\~sex + ph.pool) asu(\~1)                                  | 13224.11 | 37 | 26522.21 | 40.733875 | 0.0000000 | 1.0000000 |
 
 ``` r
 ##top mod
 top.mod.kill <- mods.kill.out[[2]]
+```
+
+## Compile AIC for density kill
+
+``` r
+##all model fits to this point
+
+AIC.dens.kill <- (fitList.oSCR(c(mods.kill.out), rename = TRUE)%>%
+  modSel.oSCR())$aic.tab%>%
+  as_tibble()%>%
+      mutate(model=str_split(model," p",simplify = TRUE)[,1])%>%
+     mutate(model=str_replace_all(model,c("vacc_scale"="vacc-1",
+                                          "vacc2_scale"="vacc-2",
+                                          "fruit_cal_sum_subset_trim_scale"="fruit-1",
+                                          "f.alt_scale"="fruit-2",
+                                         "cc_scale"="cc",
+                                         "PPT_sp_scale"="ppt",
+                                         "caloriedens_2005_2015_scale"="ungulate",
+                                         "secure_scale"="secure",
+                                         "hum_dens_log_scale"="hum_dens_log",
+                                         "salm_iso_gm_scale"="salm_mowat",
+                                         "salm_ce_diversity_scale"="salm_diver",
+                                         "salm_f95_Adams_scale"="salm_adams",
+                                         "salm_tony_scale"="salm_hamilton",
+                                         "meat_iso_gm_scale"="meat_mowat",
+                                         "rd_dens_scale"="rd_dens",
+                                         "bb_scale"="bb",
+                                         "PINUALB_occcov_scale"="whitebark",
+                                         "ndvi_scale"="green",
+                                         "hk.big_scale"="hunter_kill",
+                                         "nhk.big_scale"="non-hunter_kill",
+                                         " "="",
+                                         "D\\(~"="",
+                                         "\\)"=""))%>%
+             str_trim(),
+           AIC=round(AIC,1),
+           dAIC=round(dAIC,1),
+           weight=round(weight,2))%>%
+    select(-CumWt, -logL)
+
+AIC.dens.kill
+
+write_csv(AIC.dens.kill, here::here("output","tables","AIC.dens.kill.csv"))
 ```
 
 ## TEST Bottom-up and Top-down limitation
@@ -1689,12 +1791,12 @@ sumld
 
 sens.plot <-ggplot(data=sens.dat, aes(x=Treatment, y=estimate, fill=Treatment))+
   #geom_flat_violin(position = position_nudge(x = .2, y = 0), alpha = .8) +
-  geom_point(data=sens.dat%>%group_by(Treatment)%>%sample_n(1000),aes(color=Treatment),position = position_jitter(width = .15), size = .3, alpha = 0.1)+
+  #geom_point(data=sens.dat%>%group_by(Treatment)%>%sample_n(1000),aes(color=Treatment),position = position_jitter(width = .15), size = .3, alpha = 0.5)+
   geom_boxplot(width = .1, outlier.shape = NA, alpha = 0.5) +
   xlab("Treatment")+
   ylab((bquote(paste("Change in bear density (%)"))))+
-  scale_fill_viridis_d()+
-  scale_color_viridis_d()+
+  scale_fill_viridis_d(direction = -1)+
+  scale_color_viridis_d(direction = -1)+
   theme_ipsum()+
   theme(axis.title.x = element_text(size=15, vjust=-7),
         axis.title.y = element_text(size=15, vjust=2),
@@ -1862,7 +1964,7 @@ pred.dat%>%
   ggplot(aes(x=raw, y=estimate))+
   geom_line()+
   geom_ribbon(aes(ymin = estimate-se, ymax = estimate+se), fill = "grey70", alpha=0.5)+
-  facet_wrap(~name, scales="free")+
+  facet_wrap(~name, scales="free_x")+
   xlab("")+
   ylab((bquote(paste("Bear density (/1000 km"^{2},")"))))+
   scale_fill_viridis_d()+
@@ -2080,71 +2182,40 @@ sum(values(bc.dens.nohum.upr*mask5k),na.rm=TRUE)
 
 ``` r
 ##in all BC
-gbpu<-st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp")%>%
-  filter(GBPUSTATUS%in%c("Viable", "Threatened") & GBPU_VERS%in%"2012")%>%
-  rbind(st_read("/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp")%>%
-          filter(GBPUSTATUS%in%c("Extirpated") & GBPU_VERS%in%"2012")%>%
-          mutate(GBPU_NAME=c("Peace","Okanagan","South Coast","Lower Mainland")))%>%
-  drop_na(GBPU_NAME)%>%
-  select(GBPU_NAME,GBPUSTATUS)%>%
+
+gbpu<-st_read(here::here("Data_Prep","Spatial_Layers_ProvSECR","gbpu","BCGW_7113060B_1628118453119_4540","GCPB_GRIZZLY_BEAR_POP_UNITS_SP","GBPU_BC_polygon.shp"))%>%
+  filter(VER_NAME%in%"2020")%>%
+  drop_na(POP_NAME)%>%
+  rbind(st_read(here::here("Data_Prep","Spatial_Layers_ProvSECR","gbpu","BCGW_7113060B_1628118453119_4540","GCPB_GRIZZLY_BEAR_POP_UNITS_SP","GBPU_BC_polygon.shp"))%>%
+  filter(VER_NAME%in%"2020" & is.na(POP_NAME))%>%
+    mutate(POP_NAME=c("South-central interior", "Peace", "South coast", "Lower mainland")))%>%
+  select(POP_NAME,CNSRV_DESC)%>%
   mutate(count=1)%>%
-  group_by(GBPU_NAME,GBPUSTATUS)%>%
+  group_by(POP_NAME,CNSRV_DESC)%>%
   summarise(count=mean(count))%>%
   ungroup()
 ```
 
-    ## Reading layer `GBPU_polygon' from data source `/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp' using driver `ESRI Shapefile'
-    ## Simple feature collection with 278 features and 10 fields
+    ## Reading layer `GBPU_BC_polygon' from data source `/Users/clayton.lamb/Google Drive/Documents/University/U_A/Analyses/BC_Wide_PhD/Prov_Grizz_density_oSCR/Grizzly-Density-BC/Data_Prep/Spatial_Layers_ProvSECR/gbpu/BCGW_7113060B_1628118453119_4540/GCPB_GRIZZLY_BEAR_POP_UNITS_SP/GBPU_BC_polygon.shp' using driver `ESRI Shapefile'
+    ## Simple feature collection with 455 features and 13 fields
     ## geometry type:  POLYGON
-    ## dimension:      XYZ
+    ## dimension:      XY
     ## bbox:           xmin: 283580.2 ymin: 309888.4 xmax: 2032694 ymax: 1733502
-    ## z_range:        zmin: 0 zmax: 0
     ## projected CRS:  NAD83 / BC Albers
-    ## Reading layer `GBPU_polygon' from data source `/Users/clayton.lamb/Google Drive/Documents/University/Geographic_Data/Bears/GBPU_Boundaries_Bears/GBPU_BC/GBPU_polygon.shp' using driver `ESRI Shapefile'
-    ## Simple feature collection with 278 features and 10 fields
+    ## Reading layer `GBPU_BC_polygon' from data source `/Users/clayton.lamb/Google Drive/Documents/University/U_A/Analyses/BC_Wide_PhD/Prov_Grizz_density_oSCR/Grizzly-Density-BC/Data_Prep/Spatial_Layers_ProvSECR/gbpu/BCGW_7113060B_1628118453119_4540/GCPB_GRIZZLY_BEAR_POP_UNITS_SP/GBPU_BC_polygon.shp' using driver `ESRI Shapefile'
+    ## Simple feature collection with 455 features and 13 fields
     ## geometry type:  POLYGON
-    ## dimension:      XYZ
+    ## dimension:      XY
     ## bbox:           xmin: 283580.2 ymin: 309888.4 xmax: 2032694 ymax: 1733502
-    ## z_range:        zmin: 0 zmax: 0
     ## projected CRS:  NAD83 / BC Albers
 
 ``` r
+#max(gbpu$count) #==1. good
+
 bc5k <- fasterize(gbpu, bc.dens.nohum.est, field = "count", fun="first")
-
-
-###across all areas that had bears
-sum(values(bc.dens.nohum.est*bc5k),na.rm=TRUE)
 ```
 
-    ## [1] 25294.61
-
-``` r
-sum(values(bc.dens.nohum.lwr*bc5k),na.rm=TRUE)
-```
-
-    ## [1] 20802.18
-
-``` r
-sum(values(bc.dens.nohum.upr*bc5k),na.rm=TRUE)
-```
-
-    ## [1] 30843.6
-
-``` r
-##get kill rates
-All%>%
-  tibble%>%
-  mutate(type=case_when(!KILL_CODE %in% 1~"nonhunter",
-                        KILL_CODE %in% c(1)~"hunter"))%>%
-  filter(YEAR%in%c(1998:2018))%>%
-  group_by(type,YEAR)%>%
-  count%>%
-  group_by(type)%>%
-  summarise(n=mean(n),
-            rate=100*(mean(n)/sum(values(bc.dens.nohum.est*mask5k),na.rm=TRUE)))
-```
-
-### The current population of grizzly bears in BC is estimated as 17824 (95% CI:15145-21019). If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, 22290 (95% CI:18421-27044) grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be 25295 (95% CI:20802-30844) grizzly bears presesnt.
+### The current population of grizzly bears in BC is estimated as 17824 (95% CI:15145-21019). If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, 22290 (95% CI:18421-27044) grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be 25362 (95% CI:20851-30937) grizzly bears presesnt.
 
 ## Kill rates
 
@@ -2276,7 +2347,7 @@ ggsave(here::here("output", "plots", "density.kill.png"), height=8, width=8, uni
 ## Get bear density/abundance in each GBPU
 
 ``` r
-plot(gbpu["GBPU_NAME"])
+plot(gbpu["POP_NAME"])
 ```
 
 ![](README_files/figure-gfm/dens%20by%20region-1.png)<!-- -->
@@ -2311,19 +2382,19 @@ gbpu_ests <- gbpu%>%
         hunter.rate= (100*(hunter.kill/abundance))%>%round(1),
         nonhunter.rate= (100*(nonhunter.kill/abundance))%>%round(1),
         total.rate=hunter.rate+nonhunter.rate)%>%
-  rename("name"="GBPU_NAME")
+  rename("name"="POP_NAME")
 
 gbpu_ests%>%
-filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
+filter(!CNSRV_DESC %in%c("Extirpated"))%>%
   mutate(Density=paste0(density," (",d.lwr,"-",d.upr,")"),
          Abundance=paste0(abundance," (",abundance.lwr,"-",abundance.upr,")"))%>%
-  select(Name=name, Status=GBPUSTATUS, Density,Abundance,Hunterrate=hunter.rate,Nonhunterrate=nonhunter.rate)%>%
+  select(Name=name, Risk=CNSRV_DESC, Density,Abundance,Hunterrate=hunter.rate,Nonhunterrate=nonhunter.rate)%>%
   write_csv(here::here("output", "tables", "gbpu_calc.csv"))
 
 
 ##total estimate using GBPU's
 pop.est <- gbpu_ests%>%
-  filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
+filter(!CNSRV_DESC %in%c("Extirpated"))%>%
   summarise_at(7:9, sum)%>%
   mutate(est=paste0(abundance, " (95% CI: ",abundance.lwr,"-",abundance.upr,")" ))%>%
   pull(est)
@@ -2331,7 +2402,7 @@ pop.est <- gbpu_ests%>%
 
 ##total estimate without ppl within extant range using GBPU's
 popest.extant.nohuman <- gbpu_ests%>%
-  filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
+filter(!CNSRV_DESC %in%c("Extirpated"))%>%
   summarise_at("abundance.nohuman", sum)%>%
   pull(abundance.nohuman)
 
@@ -2343,16 +2414,15 @@ popest.all.nohuman <- gbpu_ests%>%
 
 
 gbpu_ests%>%
-  filter(GBPUSTATUS%in%c("Extirpated"))%>%
+  filter(CNSRV_DESC%in%c("Extirpated") & !name%in%"South Coast")%>%
     select(name,area, density=density.allrange,abundance=abundance.allrange, density.nohuman=density.nohuman.allrange, abundance.nohuman=abundance.nohuman.allrange)%>%
-  mutate(name=c("Peace", "Okanagan", "Lower Mainland", "Lower Mainland"))%>%
   write_csv(here::here("output", "tables", "extirpated.csv"))
 
 
 
 
 est.plot.dat <- gbpu_ests%>%
-    filter(GBPUSTATUS%in%c("Viable", "Threatened"))%>%
+filter(!CNSRV_DESC %in%c("Extirpated"))%>%
     select(name,density, density.nohuman)%>%
     mutate(dif=(density.nohuman-density)/density.nohuman)
 
@@ -2365,9 +2435,10 @@ est.plot <- ggplot()+
       segment.color = "grey50",
       hjust = 0,
       nudge_y=20,
+      nudge_x=1,
       segment.curvature = -0.2,
     segment.ncp = 3,
-      force=10,
+      force=5,
       size=2.5)+
     geom_point(data=est.plot.dat,aes(x=density, y=density.nohuman, color=dif*100))+
     geom_abline(intercept = 0, slope = 1)+
@@ -2398,14 +2469,16 @@ nrow=2, ncol=1)
 ![](README_files/figure-gfm/dens%20by%20region-2.png)<!-- -->
 
 ``` r
-ggsave(here::here("output", "plots", "elas.plot_plusmaps2.png"), height=8, width=11, unit="in")
+ggsave(here::here("output", "plots", "elas.plot_plusmaps2.png"), height=8.5, width=11.5, unit="in")
 
     
 ##compare estimates to individual surveys
     study.areas <-  st_read(here::here("Data_Prep","Spatial_Layers_ProvSECR","Traps","DNA_StudyBounds.shp"))%>%
       st_transform("+proj=aea +lat_0=45 +lon_0=-126 +lat_1=50 +lat_2=58.5 +x_0=1000000 +y_0=0 +ellps=GRS80 +units=m +no_defs")%>%
       mutate(area=(st_area(.)/1E9)%>%as.numeric%>%round(1))%>%
-      mutate(Study=case_when(Study%in%c("HWY3_2004", "HWY3_2005", "Region_2004","Region_2007", "S_Purcell_1998", "S_Purcell_2001")~Study, TRUE~str_sub(Study,0,-6)))
+      mutate(Study=case_when(Study%in%c("HWY3_2004", "HWY3_2005", "Region_2004","Region_2007", "S_Purcell_1998", "S_Purcell_2001")~Study,
+                             Study%in%c("West_Slopes_1996_1998")~"West_Slopes",
+                             TRUE~str_sub(Study,0,-6)))
 ```
 
     ## Reading layer `DNA_StudyBounds' from data source `/Users/clayton.lamb/Google Drive/Documents/University/U_A/Analyses/BC_Wide_PhD/Prov_Grizz_density_oSCR/Grizzly-Density-BC/Data_Prep/Spatial_Layers_ProvSECR/Traps/DNA_StudyBounds.shp' using driver `ESRI Shapefile'
@@ -2445,12 +2518,15 @@ ggsave(here::here("output", "plots", "elas.plot_plusmaps2.png"), height=8, width
       pull(Study)
     
     study.areas_ests <- study.areas_ests%>%
-      filter(Study%in%study.areas_ests.count)
-    # %>%
-    #   left_join(study.areas%>%as_tibble%>%select(-geometry))%>%
-    #   mutate(Study_plot=paste0(Study, " (",area,")")%>%fct_reorder(., desc(density)))
+      filter(Study%in%study.areas_ests.count)%>%
+      left_join(study.areas%>%as_tibble%>%group_by(Study)%>%summarise(area=mean(area)%>%round(1)))%>%
+      mutate(Study=case_when(Study%in%"Kettle-Granby_Grizzly_Bear_Population_Unit"~"Kettle-Granby",
+                             Study%in%"Central_Selkirk_Mountains"~"Central_Selkirk",
+                             TRUE~Study))%>%
+      mutate(Study_plot=paste0(Study, " (",area,")")%>%fct_reorder(., desc(density)))
+
     
-ggplot(study.areas_ests,aes(x=density,y=fct_reorder(Study, desc(density)),color=type))+
+ggplot(study.areas_ests,aes(x=density,y=fct_reorder(Study_plot, desc(density)),color=type))+
   geom_linerange(aes(xmin=d.lwr,xmax=d.upr), size=1.5,alpha=0.5)+
   geom_point()+
   labs(x="Density", y="Study")+
@@ -2466,6 +2542,8 @@ ggplot(study.areas_ests,aes(x=density,y=fct_reorder(Study, desc(density)),color=
 ![](README_files/figure-gfm/dens%20by%20region-3.png)<!-- -->
 
 ``` r
+ggsave(here::here("output", "plots", "dens_compare.png"), height=6, width=7, unit="in")
+
 ###compare to provincial estimates
 historic <- read_csv(here::here("Data_Prep","Data","old_estimates","historic_estimates.csv"))
 
@@ -2497,7 +2575,7 @@ historic <- read_csv(here::here("Data_Prep","Data","old_estimates","historic_est
     ## position_identity
 
 ``` r
-  ggplot(comp.dat,aes(x=scr.abundance,y=gov.abundance, color=year, fill=year, group=year))+
+  ggplot(comp.dat,aes(y=scr.abundance,x=gov.abundance, color=year, fill=year, group=year))+
     geom_point(alpha=0.5)+
     geom_abline(intercept = 0, slope = 1, linetype=2)+
     expand_limits(x = 0, y = 0)+
@@ -2508,12 +2586,16 @@ historic <- read_csv(here::here("Data_Prep","Data","old_estimates","historic_est
           axis.text.x = element_text(size=13),
           axis.text.y = element_text(size=13),
           plot.title = element_text(size=22),
-          plot.subtitle = element_text(size=17))
+          plot.subtitle = element_text(size=17))+
+    xlim(0,1350)+
+    ylim(0,1350)
 ```
 
 ![](README_files/figure-gfm/dens%20by%20region-5.png)<!-- -->
 
 ``` r
+ggsave(here::here("output", "plots", "gov_vs_scr.png"), height=6, width=7, unit="in")
+
   comp.dat%>%
     group_by(year)%>%
     summarise(cor=cor(scr.abundance, gov.abundance, 
@@ -2521,7 +2603,7 @@ historic <- read_csv(here::here("Data_Prep","Data","old_estimates","historic_est
                       method="spearman"))
 ```
 
-### Using the GBPU boundaries: The current population of grizzly bears in BC is estimated as 17611 (95% CI: 14980-20759). If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, 2.183610^{4} grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be 2.529310^{4} grizzly bears presesnt.
+### Using the GBPU boundaries: The current population of grizzly bears in BC is estimated as 17641 (95% CI: 15004-20795). If the negative effects of human habitation were removed within the current extent of grizzly bear range in BC, 2.188410^{4} grizzly bears could be presesnt. If the negative effects of human habitation were removed within the current and historic range of bears, and they re-occupied these areas, there could be 2.536110^{4} grizzly bears presesnt.
 
 ## TEST Secure Habitat Breakpoint
 
@@ -2584,7 +2666,7 @@ stopCluster(cl)
 
 
 ##examine model fits
-(fitList.oSCR(mods.secure.out)%>%
+(fitList.oSCR(mods.secure.out, rename = TRUE)%>%
     modSel.oSCR())$aic.tab%>%
   as_tibble()
 

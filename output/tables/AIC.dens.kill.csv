@@ -1,0 +1,5 @@
+model,K,AIC,dAIC,weight
+vacc-1+green+cc+salm_mowat+salm_diver+secure+hum_dens_log+bb+hunter_kill,38,26481.5,0,0.72
+vacc-1+green+cc+salm_mowat+salm_diver+secure+hum_dens_log+bb+nhunter_kill+hunter_kill,39,26483.4,1.9,0.28
+vacc-1+green+cc+salm_mowat+salm_diver+secure+hum_dens_log+bb+nhunter_kill,38,26521,39.5,0
+vacc-1+green+cc+salm_mowat+salm_diver+secure+hum_dens_log+bb,37,26522.2,40.7,0

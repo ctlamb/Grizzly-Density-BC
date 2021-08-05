@@ -1,0 +1,7 @@
+model,K,AIC,dAIC,weight
+D(~d.pool) p(~ph.pool + sex + b) sig(~ph.pool + sex) asu(~1),55,26702.2,0,1
+D(~d.pool) p(~ph.pool + sex) sig(~ph.pool + sex) asu(~1),54,26993.5,291.2,0
+D(~d.pool) p(~sex + b) sig(~sex) asu(~1),33,27027.4,325.2,0
+D(~d.pool) p(~ph.pool) sig(~ph.pool) asu(~1),52,27373.4,671.1,0
+D(~d.pool) p(~sex) sig(~sex) asu(~1),32,27452.7,750.5,0
+D(~d.pool) p(~1) sig(~1) asu(~1),30,27856,1153.8,0

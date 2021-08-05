@@ -1,57 +1,56 @@
-Name,Status,Density,Abundance,Hunterrate,Nonhunterrate
-Alta,Viable,12.3 (10.4-14.7),165 (139-196),1.6,0.2
-Babine,Viable,14.2 (12.1-16.9),203 (172-240),2.4,0.8
-Blackwater-West Chilcotin,Threatened,11.8 (9.6-14.4),238 (195-291),0.1,0.5
-Bulkley-Lakes,Viable,12.3 (10.2-14.7),293 (244-351),2.5,1.1
-Cassiar,Viable,34.6 (29.2-41),1277 (1079-1514),0.8,0.1
-Central Monashee,Viable,13.7 (11.9-15.7),87 (76-100),1.7,0.8
-Central Rockies,Viable,35.9 (31.7-40.7),240 (212-273),2,0.1
-Central Selkirk,Viable,19.2 (16.7-22.1),109 (95-125),3.7,1.4
-Central-South Purcells,Viable,21.2 (18.4-24.5),244 (212-282),1.8,1.1
-Columbia-Shuswap,Viable,17.4 (15.2-20.1),197 (171-227),2.3,0.4
-Cranberry,Viable,10.8 (8.7-13.4),126 (102-157),3.6,1.7
-Edziza-Lower Stikine,Viable,39.4 (33.5-46.4),620 (527-730),0.7,0.1
-Finlay-Ospika,Viable,35.4 (30.8-40.7),1088 (946-1251),1.5,0
-Flathead,Viable,21.6 (18.6-25),75 (65-87),5.2,1.5
-Francois,Viable,10.9 (9.2-12.9),95 (81-113),0.3,0.1
-Garibaldi-Pitt,Threatened,7.7 (6.2-9.7),9 (7-11),0,0
-Hart,Viable,20.4 (17.5-23.7),402 (346-469),2.2,0.4
-Hyland,Viable,25.2 (21-30.2),441 (368-530),1.2,0.1
-Kettle-Granby,Threatened,12.7 (11-14.8),84 (73-97),0,0.7
-Khutzeymateen,Viable,8.9 (6.9-11.5),73 (57-95),1,0.4
-Kingcome-Wakeman,Viable,13.3 (10.7-16.6),81 (65-101),2.5,0.1
-Kitlope-Fiordland,Viable,14 (11.2-17.5),154 (124-193),0.5,0
-Klinaklini-Homathko,Viable,20.1 (16.4-24.7),256 (208-314),0.2,0.2
-Knight-Bute,Viable,14.3 (11.5-17.8),94 (76-118),3.6,0
-Kwatna-Owikeno,Viable,12 (9.6-15.1),137 (110-172),1.8,0.5
-Moberly,Viable,22.2 (19.2-25.7),173 (149-200),1.4,0.3
-Muskwa,Viable,36.9 (31.6-43.1),1326 (1137-1549),1.3,0.1
-Nation,Viable,10 (8.5-11.9),186 (157-220),1.6,0.5
-North Cascades,Threatened,10.3 (8.6-12.2),60 (50-71),0,0
-North Coast,Viable,7.2 (5.4-9.5),51 (39-68),5.3,1.2
-North Purcells,Viable,36.3 (32.2-40.8),201 (179-227),3.5,0.1
-North Selkirk,Viable,33.4 (29.7-37.6),203 (181-229),3,0
-Nulki,Viable,6.7 (5.4-8.5),48 (39-61),0.2,4.4
-Omineca,Viable,20 (17.4-23.1),600 (522-690),1.6,0
-Parsnip,Viable,25.5 (22-29.6),279 (241-323),3.2,0.2
-Quesnel Lake North,Viable,18.3 (16-21),138 (120-158),3.6,0.1
-Robson,Viable,22.6 (19.8-25.8),440 (386-502),2.8,0.2
-Rockies Park Ranges,Viable,22.4 (19.4-26),132 (114-153),2.5,0.8
-Rocky,Viable,26.8 (22.7-31.6),1027 (871-1213),1.1,0.5
-South Chilcotin Ranges,Threatened,16.4 (13.8-19.5),262 (221-312),0.1,0.3
-South Rockies,Viable,20.7 (17.7-24.3),174 (148-204),3.9,3.3
-South Selkirk,Threatened,10.5 (8.6-12.8),42 (35-52),0,1.9
-Spatsizi,Viable,46.7 (40.4-54),1009 (873-1167),1,0.1
-Spillamacheen,Viable,23.5 (20.5-26.9),94 (82-108),2.8,0.4
-Squamish-Lillooet,Threatened,18.3 (15.3-22),89 (75-107),0,0
-Stein-Nahatlatch,Threatened,9.6 (7.8-11.7),53 (43-65),0.2,0.4
-Stewart,Viable,27 (22.2-32.8),286 (235-347),1.7,0.5
-Taiga,Viable,19.5 (16.5-22.9),973 (827-1146),0,0
-Taku,Viable,26.8 (22-32.7),772 (634-943),1.3,0.1
-Tatshenshini,Viable,52.5 (44.1-62.7),797 (670-951),0.8,0
-Toba-Bute,Viable,20 (16.6-24),146 (122-175),0,0.1
-Tweedsmuir,Viable,20.7 (17.5-24.5),392 (332-464),0.8,0.8
-Upper Skeena-Nass,Viable,34.5 (29.7-40.1),587 (506-681),1.5,0.1
-Valhalla,Viable,15.2 (13.1-17.7),52 (45-61),1.2,0.6
-Wells Gray,Viable,20 (17.2-23.2),200 (173-233),1.1,0.1
-Yahk,Threatened,11.9 (9-15.7),31 (24-42),0,2.3
+Name,Risk,Density,Abundance,Hunterrate,Nonhunterrate
+Alta,Moderate,12.3 (10.4-14.7),165 (139-196),1.6,0.2
+Babine,Moderate,14.2 (12.1-16.9),203 (172-240),2.4,0.8
+Blackwater-West Chilcotin,Moderate,11.7 (9.6-14.4),249 (204-304),0.1,0.6
+Bulkley-Lakes,Moderate,12.3 (10.2-14.7),293 (244-351),2.5,1.1
+Cassiar,Very Low,34.6 (29.2-41),1277 (1079-1514),0.8,0.1
+Central Monashee,High,13.7 (11.9-15.7),87 (76-100),1.7,0.8
+Central Rockies,Low,35.9 (31.7-40.7),240 (212-273),2,0.1
+Central Selkirk,Moderate,19.2 (16.7-22.1),109 (95-125),3.7,1.4
+Central-South Purcells,High,21.2 (18.4-24.5),244 (212-282),1.8,1.1
+Columbia-Shuswap,High,17.4 (15.2-20.1),197 (171-227),2.3,0.4
+Cranberry,Low,10.7 (8.6-13.3),126 (102-158),3.6,1.7
+Edziza-Lower Stikine,Very Low,39.4 (33.5-46.4),620 (527-730),0.7,0.1
+Finlay-Ospika,Very Low,35.4 (30.8-40.7),1088 (946-1251),1.5,0
+Flathead,High,21.3 (18.3-24.7),76 (66-88),5.1,2.4
+Francois,High,10.9 (9.2-12.9),95 (81-113),0.3,0.1
+Garibaldi-Pitt,Extreme,7.7 (6.2-9.7),9 (7-11),0,0
+Hart,Moderate,20.4 (17.5-23.7),402 (346-469),2.2,0.4
+Hyland,Very Low,25.2 (21-30.2),441 (368-530),1.2,0.1
+Kettle-Granby,High,12.7 (11-14.8),84 (73-97),0,0.7
+Khutzeymateen,Low,9 (7-11.6),73 (57-95),1,0.4
+Kingcome-Wakeman,Low,13.3 (10.7-16.6),81 (65-101),2.5,0.1
+Kitlope-Fiordland,Low,13.9 (11.1-17.4),159 (127-199),0.4,0
+Klinaklini-Homathko,Low,19.8 (16.1-24.3),258 (210-317),0.2,0.2
+Knight-Bute,Low,14.3 (11.5-17.8),94 (76-118),3.6,0
+Kwatna-Owikeno,Low,12 (9.6-15.1),137 (110-172),1.8,0.5
+Moberly,High,22.2 (19.2-25.7),173 (149-200),1.4,0.3
+Muskwa,Very Low,36.9 (31.6-43.1),1326 (1137-1549),1.3,0.1
+Nation,Moderate,10 (8.5-11.9),186 (157-220),1.6,0.5
+North Cascades,Extreme,10.3 (8.6-12.2),60 (50-71),0,0
+North Coast,Moderate,7.2 (5.4-9.5),51 (39-68),5.3,1.2
+North Purcells,Moderate,30.9 (27.3-35),295 (261-334),3.3,0.2
+North Selkirk,Moderate,33.4 (29.7-37.6),203 (181-229),3,0
+Nulki,High,6.7 (5.4-8.5),48 (39-61),0.2,4.4
+Omineca,Very Low,20 (17.4-23.1),600 (522-690),1.6,0
+Parsnip,Very Low,25.5 (22-29.6),279 (241-323),3.2,0.2
+Quesnel Lake North,Moderate,18.3 (16-21),138 (120-158),3.6,0.1
+Robson,Moderate,22.6 (19.8-25.8),440 (386-502),2.8,0.2
+Rockies Park Ranges,High,22.4 (19.4-26),132 (114-153),2.5,0.8
+Rocky,Moderate,26.8 (22.7-31.6),1027 (871-1213),1.1,0.5
+South Chilcotin Ranges,Moderate,16.3 (13.6-19.4),272 (228-324),0.1,0.4
+South Rockies,High,20.8 (17.8-24.4),173 (148-203),3.9,2.9
+South Selkirk,High,10.5 (8.6-12.8),42 (35-52),0,1.9
+Spatsizi,Very Low,46.7 (40.4-54),1009 (873-1167),1,0.1
+Squamish-Lillooet,High,18.3 (15.3-22),89 (75-107),0,0
+Stein-Nahatlatch,Extreme,9.6 (7.8-11.7),53 (43-65),0.2,0.4
+Stewart,Very Low,27 (22.2-32.8),286 (235-347),1.7,0.5
+Taiga,Low,19.5 (16.5-22.9),973 (827-1146),0,0
+Taku,Very Low,26.8 (22-32.7),772 (634-943),1.3,0.1
+Tatshenshini,Low,52.5 (44.1-62.7),797 (670-951),0.8,0
+Toba-Bute,Low,20 (16.6-24),146 (122-175),0,0.1
+Tweedsmuir,Very Low,20.7 (17.5-24.5),394 (334-466),0.9,0.8
+Upper Skeena-Nass,Very Low,34.5 (29.7-40.1),587 (506-681),1.5,0.1
+Valhalla,High,15.2 (13.1-17.7),52 (45-61),1.2,0.6
+Wells Gray,Low,20 (17.2-23.2),200 (173-233),1.1,0.1
+Yahk,High,11.9 (9-15.7),31 (24-42),0,2.3
